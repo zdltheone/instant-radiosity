@@ -15,6 +15,7 @@ raytracer.xcodeproj/xcuserdata/sturm.xcuserdatad/xcschemes/xcschememanagement.pl
 *.suo
 *.user
 *.sln.docstates
+*.sln
 
 # Build results
 [Dd]ebug/
@@ -37,6 +38,8 @@ raytracer.xcodeproj/xcuserdata/sturm.xcuserdatad/xcschemes/xcschememanagement.pl
 *.vspscc
 .builds
 *.dotCover
+
+raytracer/*
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
