@@ -8,9 +8,11 @@ public:
     Image(int width, int height);
     ~Image();
 
-    void setPixel(int width, int height, vec4 color);
-    vec4 getPixel(int width, int height) const;
+    void setPixel(unsigned int width, unsigned int height, vec4 color);
+    vec4 getPixel(unsigned int width, unsigned int height) const;
 
+    unsigned int getWidth() const;
+    unsigned int getHeight() const;
 private:
     int _width;
     int _height;
