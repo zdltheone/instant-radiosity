@@ -11,5 +11,4 @@ typedef XMFLOAT2 vec2;
 typedef XMFLOAT4X4 matrix4;
 typedef XMFLOAT3X3 matrix3;
 
-
 #endif
