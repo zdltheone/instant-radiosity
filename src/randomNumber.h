@@ -20,6 +20,8 @@ public:
 	double PhiBDirected( int base, int ithNum );
 	double PhiBIncremental( int base, double x );
 
+	unsigned int GetithPrimeNumber( int ith );
+
 private:
 	vector<unsigned int> m_primeArray;
 	// Seach prime numbers that belong to [1, m_maxNum]

@@ -62,6 +62,11 @@ void RandomNumberGenerator::GeneratePrimeList( unsigned int upperBound )
 	delete[] flag;
 }
 
+unsigned int RandomNumberGenerator::GetithPrimeNumber( int ith )
+{
+	return m_primeArray[ ith ];
+}
+
 double RandomNumberGenerator::GetPseudoRandomNum()
 {
 	return rand() / (double)(RAND_MAX);
