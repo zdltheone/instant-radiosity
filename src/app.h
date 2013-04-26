@@ -5,6 +5,8 @@
 #include "window.h"
 #include "direct3D_11.h"
 #include "shaderProgram.h"
+#include "raytracer.h"
+#include "geometryObjects.h"
 #include <vector>
 #include <iostream>
 #include <map>
@@ -31,6 +33,8 @@ private:
 	ID3D11Device* _device;
 
 	ShaderProgram* _basic;
+
+    RayTracer* _raytracer;
 };
 
 #endif

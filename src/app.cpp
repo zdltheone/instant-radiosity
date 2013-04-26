@@ -22,7 +22,7 @@ void App::InitApp()
 	_device = _direct3D->GetDevice();
 	_deviceContext = _direct3D->GetDeviceContext();
 
-
+    _raytracer = new RayTracer(5);
 	//_basic = new ShaderProgram(_device, _deviceContext);
 	//_basic->CompileShaders(L"media/hlsl/basic.vsh", L"media/hlsl/basic.psh");
 }
@@ -41,7 +41,27 @@ void App::Render() {
 
 void App::Run()
 {
-	bool done = false;
+
+    Scene scene;
+    Camera camera;
+    Sphere s1;
+    Cube c1;
+    s1.SetRadius(10);
+    s1.SetCenter(XMFLOAT3(10, 10, 10));
+    c1.SetEdgeLen(10);
+    c1.SetCenter(XMFLOAT3(-10, -10, 10));
+
+    scene.addPrimitive(&c1);
+    scene.addPrimitive(&s1);
+    scene.setCamera(&camera);
+
+
+    Image imageBuffer(200, 200);
+    _raytracer->raytrace(&scene, &imageBuffer);
+
+
+
+	/*bool done = false;
 	MSG msg;
 
 	while(!done)
@@ -57,8 +77,7 @@ void App::Run()
 		}
 		else
 		{
-			Update();
-			Render();
+		
 		}
-	}
+	}*/
 }

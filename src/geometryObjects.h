@@ -25,7 +25,7 @@ private:
 	XMFLOAT3 m_center;
 };
 
-class Sphere : SolidGeometryPrimitive
+class Sphere : public SolidGeometryPrimitive
 {
 public:
 	Sphere() : m_radius( 0.0f ){}
@@ -41,7 +41,7 @@ private:
 	double m_radius;
 };
 
-class Cube : SolidGeometryPrimitive
+class Cube : public SolidGeometryPrimitive
 {
 public:
 	Cube() : m_edgeLen( 0.0f ){}

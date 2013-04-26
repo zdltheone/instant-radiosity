@@ -10,7 +10,7 @@ public:
 
     void raytrace(const Scene* scene, Image* imageBuffer);
 private:
-    XMFLOAT3 traceRay(const Ray& ray);
+    XMFLOAT3 traceRay(const Ray& ray, unsigned int depth);
 private:
     const Scene* _scene;
     unsigned int _maxDepth;

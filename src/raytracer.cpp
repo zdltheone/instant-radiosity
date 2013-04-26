@@ -24,22 +24,22 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     float xOffset = dx / 2.f;
     float yOffset = dy / 2.f;
 
-    for(unsigned int i(0); i < imageBuffer->getHeight(); ++i) {
-        for(unsigned int j(0); j < imageBuffer->getWidth(); ++j) {
-            XMFLOAT3 dir(left + i*(dx + xOffset), 
-                         bottom + j*(dy + yOffset), 
+    for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
+        for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
+            XMFLOAT3 dir(left + row*(dx + xOffset), 
+                         bottom + col*(dy + yOffset), 
                          origin.z + camera->getNearClip());
 
             math_normalize(dir);
 
-            XMFLOAT3 color = traceRay(Ray(origin, dir));
+            XMFLOAT3 color = traceRay(Ray(origin, dir), 0);
         
-            imageBuffer->setPixel(i, j, XMFLOAT4(color.x, color.y, color.z, 1.f));
+            imageBuffer->setPixel(row, col, XMFLOAT4(color.x, color.y, color.z, 1.f));
         }
     }
 }
 
-XMFLOAT3 RayTracer::traceRay(const Ray& ray) {
+XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     float t = 0.f;
 
     const Primitive* primitive = _scene->intersectScene(ray, t);
@@ -49,4 +49,12 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray) {
 
     XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
     XMFLOAT3 normal = primitive->getNormal(intersectPoint);
+
+    if(depth > _maxDepth) {
+        return XMFLOAT3(); //fix this 
+    }
+
+    //check if object is diffuse or specular
+    // if diffuse -> accumulate radiance from vpls and light sources
+    // if specular -> reflect ray and trace into scene
 }
