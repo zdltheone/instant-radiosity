@@ -60,7 +60,6 @@ void App::Run()
     _raytracer->raytrace(&scene, &imageBuffer);
 
 
-
 	/*bool done = false;
 	MSG msg;
 

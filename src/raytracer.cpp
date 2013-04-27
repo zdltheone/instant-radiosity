@@ -58,3 +58,15 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     // if diffuse -> accumulate radiance from vpls and light sources
     // if specular -> reflect ray and trace into scene
 }
+
+void RayTracer::traceRayOnce( const Ray& ray, double& t )
+{
+	float tmpT = -INF;
+	const Primitive* primitive = _scene->intersectScene( ray, tmpT );
+	if( primitive == NULL )
+	{
+		t = -INF;
+	}
+
+	t = tmpT;
+}
