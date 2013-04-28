@@ -7,6 +7,7 @@
 #include "shaderProgram.h"
 #include "raytracer.h"
 #include "geometryObjects.h"
+#include "xmlLoader.h"
 #include <vector>
 #include <iostream>
 #include <map>

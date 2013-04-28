@@ -56,6 +56,8 @@ void App::Run()
     scene.setCamera(&camera);
 
 
+    XMLLoader::parseSceneXML("src/example_scene.xml");
+
     Image imageBuffer(200, 200);
     _raytracer->raytrace(&scene, &imageBuffer);
 

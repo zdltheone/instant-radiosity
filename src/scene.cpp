@@ -14,6 +14,10 @@ void Scene::addLight(const Light* light) {
     _lights.push_back(light);
 }
 
+const std::vector<const Light*>& Scene::getLights() const {
+    return _lights;
+}
+
 void Scene::setCamera(const Camera* camera) {
     assert(camera);
     _camera = camera;

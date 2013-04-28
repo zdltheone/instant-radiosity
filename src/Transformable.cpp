@@ -1,9 +1,14 @@
 #include "Transformable.h"
 
+Transformable::Transformable() {
+    _position = XMFLOAT3(0.f, 0.f, 0.f);
+    XMStoreFloat4x4(&_transform, XMMatrixIdentity());
+}
+
 void Transformable::setPosition(XMFLOAT3 position) {
-    XMMATRIX matrix = XMMatrixTranslationFromVector(XMLoadFloat3(&position));
-    XMStoreFloat4x4(&_translation, matrix);
     _position = position;
+    XMMATRIX matrix = XMMatrixTranslationFromVector(XMLoadFloat3(&_position));
+    XMStoreFloat4x4(&_translation, matrix);
 }
 
 XMFLOAT3 Transformable::getPosition() const {
@@ -20,23 +25,13 @@ void Transformable::setScale(XMFLOAT3 scalingFactors) {
     XMStoreFloat4x4(&_scale, matrix);
 }
 
-void Transformable::lookAt(XMFLOAT3 position, XMFLOAT3 target, XMFLOAT3 up) {
-    XMMATRIX matrix = XMMatrixLookAtRH( XMLoadFloat3(&position),
-                                        XMLoadFloat3(&target),
-                                        XMLoadFloat3(&up));
-    XMStoreFloat4x4(&_transform, matrix); 
-}
-
 XMFLOAT4X4 Transformable::getTransformation() const {
-    XMMATRIX matrix;
     XMFLOAT4X4 transform;
-    XMMATRIX currentTransform = XMLoadFloat4x4(&_transform);
     XMMATRIX translation = XMLoadFloat4x4(&_translation);
     XMMATRIX rotation = XMLoadFloat4x4(&_rotation);
     XMMATRIX scale = XMLoadFloat4x4(&_scale);
 
-    //will this work?
-    XMStoreFloat4x4(&transform, currentTransform * translation * rotation * scale);
+    XMStoreFloat4x4(&transform, (translation * rotation * scale));
 
     return transform;
 }

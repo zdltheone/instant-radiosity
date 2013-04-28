@@ -4,6 +4,7 @@
 RayTracer::RayTracer(unsigned int maxDepth) {
     _scene = NULL;
     _maxDepth = maxDepth;
+    _instantRadiosity = new InstantRadiosity();
 }
 
 void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
@@ -23,6 +24,7 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     float dy = (top - bottom) / imageBuffer->getHeight();
     float xOffset = dx / 2.f;
     float yOffset = dy / 2.f;
+
 
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
         for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
@@ -56,8 +58,9 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
 
     //check if object is diffuse or specular
     // if diffuse -> accumulate radiance from vpls and light sources
-    // if specular -> reflect ray and trace into scene
-}
+   
+
+ }
 
 void RayTracer::traceRayOnce( const Ray& ray, double& t )
 {

@@ -1,31 +1,31 @@
 <scene>
   <camera>
-    <perspective near="" far="" xfov="" yfov="" aspect=""/>
-    <lookat x="" y="" z="" upX="" upY="" upZ=""/>
-    <translate x="" y="" z=""/>
+    <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
+    <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
+    <translate x="0" y="0" z="0"/>
   </camera>
   
   <pointLight>
-    <color r="" g="" b=""/>
+    <color r="1" g="1" b="1"/>
   </pointLight>
   
   <areaLight width="" height="">
-    <color r="" g="" b=""/>
-    <target x="" y="" z=""/>
+    <color r="1" g="1" b="1"/>
+    <target x="0" y="0" z="10"/>
   </areaLight>
   
-  <square edgelen="">
-    <rotate axisX="" axisY="" axisZ="" degrees=""/>
-    <scale x="" y="" z=""/>
-    <translate x="" y="" z=""/>
+  <square edgelen="2">
+    <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
+    <scale x="2" y="2" z="1"/>
+    <translate x="2" y="1" z="10"/>
   </square>
   
-  <cube edgelen="">
-    <rotate axisX="" axisY="" axisZ="" degrees=""/>
-    <translate x="" y="" z=""/>
+  <cube edgelen="3">
+    <rotate axisX="1" axisY="0" axisZ="0" degrees="90"/>
+    <translate x="-2" y="5" z="10"/>
   </cube>
   
-  <sphere radius="">
-    <translate x="" y="" z=""/>
+  <sphere radius="2">
+    <translate x="-5" y="3" z="12"/>
   </sphere>
 </scene>

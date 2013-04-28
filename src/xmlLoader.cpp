@@ -2,7 +2,6 @@
 using namespace tinyxml2;
 
 Scene* XMLLoader::parseSceneXML(std::string fpath) {
-    int ret = 0;
     tinyxml2::XMLDocument document;
     XMLError error = document.LoadFile(fpath.c_str());
   
@@ -10,9 +9,9 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
 	    return NULL;
     }
     XMLElement* root = document.RootElement();
-    XMLElement* sceneNode = root->FirstChildElement();
+   
 
-    XMLElement* sceneElement = sceneNode->FirstChildElement();
+    XMLElement* sceneElement = root->FirstChildElement();
     Scene* scene = new Scene();
     while(sceneElement != NULL) {
         std::string elementType = sceneElement->Name();
@@ -23,7 +22,8 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             float yFoV = 60.f;
             float nearClip = 0.1f;
             float farClip = 1000.f;
-            float aspect = 4.f/3.f;
+            float width = 800.f;
+            float height = 600.f;
             XMFLOAT3 up(0.f, 1.f, 0.f);
             XMFLOAT3 lookAt(0.f, 0.f, 10.f);
             XMFLOAT3 translate(0.f, 0.f, 0.f);
@@ -32,12 +32,13 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
 
             while(elementInfo != NULL) {
                 std::string info = elementInfo->Name();
-                if(info == "persepective") {
+                if(info == "perspective") {
                     elementInfo->QueryFloatAttribute("xfov", &xFoV);
                     elementInfo->QueryFloatAttribute("yfov", &yFoV);
                     elementInfo->QueryFloatAttribute("near", &nearClip);
                     elementInfo->QueryFloatAttribute("far", &farClip);
-                    elementInfo->QueryFloatAttribute("aspect", &aspect);
+                    elementInfo->QueryFloatAttribute("width", &width);
+                    elementInfo->QueryFloatAttribute("height", &height);
                 } else if(info == "lookat") { 
                     elementInfo->QueryFloatAttribute("x", &lookAt.x);
                     elementInfo->QueryFloatAttribute("y", &lookAt.y);
@@ -55,10 +56,20 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
                     elementInfo->QueryFloatAttribute("axisZ", &rotateAxis.z);
                     elementInfo->QueryFloatAttribute("degrees", &rotateDegrees);                    
                 } else {
+                    std::cout << __LINE__ << " -- boom\n";
                 }
 
                 elementInfo = elementInfo->NextSiblingElement();
             }
+
+            //create camera
+            Camera* camera = new Camera(width, height, xFoV, yFoV, nearClip, farClip);
+            camera->setTarget(lookAt, up);
+            camera->setPosition(translate);
+
+            //set camera in scene
+            scene->setCamera(camera);
+
         } else if(elementType == "pointLight") {
             XMLElement* elementInfo = sceneElement->FirstChildElement();
             
@@ -76,6 +87,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
                     elementInfo->QueryFloatAttribute("g", &color.y);
                     elementInfo->QueryFloatAttribute("b", &color.z);                    
                 } else {
+                    std::cout << __LINE__ << " -- boom\n";
                 }
 
                 elementInfo = elementInfo->NextSiblingElement();
@@ -84,7 +96,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             //create pointlight
             PointLight* pointLight = new PointLight();
             pointLight->setPosition(translate);
-
+       
             //add pointlight to scene
             scene->addLight(pointLight);
 
@@ -125,6 +137,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
                     elementInfo->QueryFloatAttribute("y", &scale.y);
                     elementInfo->QueryFloatAttribute("z", &scale.z);                 
                 } else {
+                    std::cout << __LINE__ << " -- boom\n";
                 }
 
                 elementInfo = elementInfo->NextSiblingElement();
@@ -139,8 +152,11 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             areaLight->setRotation(rotateAxis, rotateDegrees);
             areaLight->setScale(scale);
 
-            //add arealight to scene as primitive and light
-            scene->addPrimitive(areaLight);
+            XMVECTOR pos = XMLoadFloat3(&translate);
+            XMVECTOR tar = XMLoadFloat3(&target);
+            XMStoreFloat3(&areaLight->direction, XMVector3Normalize(tar - pos));
+
+            //add arealight to scene
             scene->addLight(areaLight);
 
         } else if(elementType == "sphere") {
@@ -176,6 +192,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
                     elementInfo->QueryFloatAttribute("y", &scale.y);
                     elementInfo->QueryFloatAttribute("z", &scale.z);                 
                 } else {
+                    std::cout << __LINE__ << " -- boom\n";
                 }
 
                 elementInfo = elementInfo->NextSiblingElement();
@@ -223,6 +240,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
                     elementInfo->QueryFloatAttribute("y", &scale.y);
                     elementInfo->QueryFloatAttribute("z", &scale.z);                  
                 } else {
+                    std::cout << __LINE__ << " -- boom\n";
                 }
 
                 elementInfo = elementInfo->NextSiblingElement();
@@ -270,6 +288,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
                     elementInfo->QueryFloatAttribute("y", &scale.y);
                     elementInfo->QueryFloatAttribute("z", &scale.z);                     
                 } else {
+                    std::cout << __LINE__ << " -- boom\n";
                 }
 
                 elementInfo = elementInfo->NextSiblingElement();
@@ -286,7 +305,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             scene->addPrimitive(square);
 
         } else {
-
+            std::cout << __LINE__ << " -- boom\n";
         }
         sceneElement = sceneElement->NextSiblingElement();
     }

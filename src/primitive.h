@@ -13,6 +13,8 @@ public:
     virtual XMFLOAT3 getNormal(const XMFLOAT3& point) const {
         return XMFLOAT3();
     };
+
+    XMFLOAT3 color;
 };
 
 #endif

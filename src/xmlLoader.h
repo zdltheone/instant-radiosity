@@ -5,6 +5,7 @@
 #include "tinyxml2.h"
 #include "geometryObjects.h"
 #include <string>
+#include <iostream>
 
 class XMLLoader {
 public:
