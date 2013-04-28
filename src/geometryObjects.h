@@ -72,7 +72,7 @@ private:
 	double m_area;
 };
 
-class Square : GeometryPrimitive
+class Square : public GeometryPrimitive
 {
 public:
 	Square() : m_edgeLen( 0.0f ){}

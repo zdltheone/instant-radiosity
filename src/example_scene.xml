@@ -1,0 +1,31 @@
+<scene>
+  <camera>
+    <perspective near="" far="" xfov="" yfov="" aspect=""/>
+    <lookat x="" y="" z="" upX="" upY="" upZ=""/>
+    <translate x="" y="" z=""/>
+  </camera>
+  
+  <pointLight>
+    <color r="" g="" b=""/>
+  </pointLight>
+  
+  <areaLight width="" height="">
+    <color r="" g="" b=""/>
+    <target x="" y="" z=""/>
+  </areaLight>
+  
+  <square edgelen="">
+    <rotate axisX="" axisY="" axisZ="" degrees=""/>
+    <scale x="" y="" z=""/>
+    <translate x="" y="" z=""/>
+  </square>
+  
+  <cube edgelen="">
+    <rotate axisX="" axisY="" axisZ="" degrees=""/>
+    <translate x="" y="" z=""/>
+  </cube>
+  
+  <sphere radius="">
+    <translate x="" y="" z=""/>
+  </sphere>
+</scene>

@@ -2,8 +2,10 @@
 #define _primitive_h_
 
 #include "ray.h"
+#include "util.h"
+#include "Transformable.h"
 
-class Primitive {
+class Primitive : public Transformable {
 public:
     virtual bool intersect(const Ray& ray, float& tOut) const {
         return false;
