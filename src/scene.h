@@ -14,6 +14,8 @@ public:
     void addPrimitive(const Primitive* primitive);
     void addLight(const Light* light);
 
+    const std::vector<const Light*>& getLights() const;
+
     void setCamera(const Camera* camera);
     const Camera* getCamera() const;
         

@@ -19,7 +19,6 @@ class App
 public:
 	~App();
 	void RunApp();
-	void SwitchActive(string name);
 private:
 	void InitApp();
 	void Update();
@@ -34,6 +33,9 @@ private:
 	ID3D11Device* _device;
 
 	ShaderProgram* _basic;
+    ID3D11SamplerState* _sampler;
+    ID3D11Buffer* _vb;
+    ID3D11Buffer* _ib;
 
     RayTracer* _raytracer;
 };

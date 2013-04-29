@@ -3,7 +3,6 @@
 
 #include "scene.h"
 #include "image.h"
-#include "instantRadiosity.h"
 
 class RayTracer {
 public:
@@ -18,7 +17,7 @@ private:
 private:
     const Scene* _scene;
     unsigned int _maxDepth;
-    InstantRadiosity* _instantRadiosity;
+   // InstantRadiosity* _instantRadiosity;
 };
 
 #endif

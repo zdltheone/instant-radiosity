@@ -2,21 +2,21 @@
 
 Image::Image(int width, int height) 
 : _width(width), _height(height) {
-    _buffer = new vec4[_width * _height];
+    _buffer = new XMFLOAT4[_width * _height];
 }
 
 Image::~Image() {
     delete [] _buffer;
 }
 
-void Image::setPixel(unsigned int pixelRow, unsigned int pixelColumn, vec4 color) {
+void Image::setPixel(unsigned int pixelRow, unsigned int pixelColumn, XMFLOAT4 color) {
     assert(pixelRow < _height);
     assert(pixelColumn < _width);
 
     _buffer[pixelColumn * _width + pixelRow] = color;
 }
 
-vec4 Image::getPixel(unsigned int pixelRow, unsigned int pixelColumn) const {
+XMFLOAT4 Image::getPixel(unsigned int pixelRow, unsigned int pixelColumn) const {
     assert(pixelRow < _height);
     assert(pixelColumn < _width);
 

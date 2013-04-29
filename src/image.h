@@ -8,8 +8,8 @@ public:
     Image(int width, int height);
     ~Image();
 
-    void setPixel(unsigned int width, unsigned int height, vec4 color);
-    vec4 getPixel(unsigned int width, unsigned int height) const;
+    void setPixel(unsigned int width, unsigned int height, XMFLOAT4 color);
+    XMFLOAT4 getPixel(unsigned int width, unsigned int height) const;
 
     unsigned int getWidth() const;
     unsigned int getHeight() const;
@@ -17,7 +17,7 @@ private:
     int _width;
     int _height;
     
-    vec4* _buffer;
+    XMFLOAT4* _buffer;
 };
 
 #endif

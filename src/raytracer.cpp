@@ -4,7 +4,7 @@
 RayTracer::RayTracer(unsigned int maxDepth) {
     _scene = NULL;
     _maxDepth = maxDepth;
-    _instantRadiosity = new InstantRadiosity();
+    //_instantRadiosity = new InstantRadiosity();
 }
 
 void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
