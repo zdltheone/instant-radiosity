@@ -8,10 +8,19 @@
 
 class Light : public Transformable{
 public:
-    Light() {};
+    enum LightType {
+        PointLight,
+        AreaLight
+    };
+public:
+    Light(LightType type) {};
     virtual ~Light() {};
 
+    LightType getType() const;
+
     XMFLOAT4 emission;
+private:
+    LightType _type;
 };
 
 /*
@@ -23,10 +32,10 @@ struct PointLight : public Light
 	XMFLOAT3 direction;
 	XMFLOAT4 color;
 
-    PointLight() {};
+    PointLight() : Light(LightType::PointLight) {};
 
 	PointLight(const XMFLOAT3& pos, const XMFLOAT3& dir, const XMFLOAT4& power ) 
-		: direction( dir ), color( power )
+		: Light(LightType::PointLight), direction( dir ), color( power )
 	{
         setPosition(pos);
 	}
@@ -40,9 +49,9 @@ struct AreaLight : public Light
 	double   width;
 	double   height;
 
-    AreaLight() {};
+    AreaLight() : Light(LightType::AreaLight) {};
 	AreaLight( const XMFLOAT3& dir, const XMFLOAT4& power, double& w, double& h ) 
-		: direction( dir ), color( power ), width( w ), height( h)
+		: Light(LightType::AreaLight), direction( dir ), color( power ), width( w ), height( h)
 	{
 	}
 };

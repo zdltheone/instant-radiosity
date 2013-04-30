@@ -31,7 +31,7 @@ XMFLOAT4X4 Transformable::getTransformation() const {
     XMMATRIX rotation = XMLoadFloat4x4(&_rotation);
     XMMATRIX scale = XMLoadFloat4x4(&_scale);
 
-    XMStoreFloat4x4(&transform, (translation * rotation * scale));
+    XMStoreFloat4x4(&transform, (scale * rotation * translation));
 
     return transform;
 }

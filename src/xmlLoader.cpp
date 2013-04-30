@@ -64,8 +64,9 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
 
             //create camera
             Camera* camera = new Camera(width, height, xFoV, yFoV, nearClip, farClip);
-            camera->setTarget(lookAt, up);
             camera->setPosition(translate);
+            camera->setTarget(lookAt, up);
+            
 
             //set camera in scene
             scene->setCamera(camera);
@@ -204,6 +205,8 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             sphere->setPosition(translate);
             sphere->setRotation(rotateAxis, rotateDegrees);
             sphere->setScale(scale);
+            
+            sphere->color = color;
 
             //add sphere to scene
             scene->addPrimitive(sphere);
@@ -253,6 +256,8 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             cube->setRotation(rotateAxis, rotateDegrees);
             cube->setScale(scale);
 
+            cube->color = color;
+
             //add cube to scene
             scene->addPrimitive(cube);
 
@@ -300,6 +305,8 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             square->setPosition(translate);
             square->setRotation(rotateAxis, rotateDegrees);
             square->setScale(scale);
+
+            square->color = color;
 
             //add square to scene
             scene->addPrimitive(square);

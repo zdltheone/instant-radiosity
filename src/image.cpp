@@ -4,9 +4,6 @@ Image::Image(int width, int height)
 : _width(width), _height(height) {
     _buffer = new XMFLOAT4[_width * _height];
 
-    for(int i(0); i < _width*_height; ++i) {
-        _buffer[i] = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
-    }
 }
 
 Image::~Image() {
@@ -17,14 +14,14 @@ void Image::setPixel(unsigned int pixelRow, unsigned int pixelColumn, XMFLOAT4 c
     assert(pixelRow < _height);
     assert(pixelColumn < _width);
 
-    _buffer[pixelColumn * _width + pixelRow] = color;
+    _buffer[(pixelRow * _width) + pixelColumn] = color;
 }
 
 XMFLOAT4 Image::getPixel(unsigned int pixelRow, unsigned int pixelColumn) const {
     assert(pixelRow < _height);
     assert(pixelColumn < _width);
 
-    return _buffer[pixelColumn * _width + pixelRow];
+    return _buffer[(pixelRow * _width) + pixelColumn];
 }
 
 unsigned int Image::getWidth() const {

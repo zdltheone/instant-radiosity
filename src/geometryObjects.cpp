@@ -10,7 +10,7 @@ XMFLOAT3 SolidGeometryPrimitive::GetCenter()
 	return m_center;
 }
 
-bool SolidGeometryPrimitive::intersect(const Ray& ray, double& tOut) const {
+bool SolidGeometryPrimitive::intersect(const Ray& ray, float& tOut) const {
     return false;
 }
 
@@ -27,19 +27,36 @@ double Sphere::GetRadius()
 	return m_radius;
 }
 
-bool Sphere::intersect(const Ray& ray, double& tOut) const {
+
+XMFLOAT3 Sphere::getNormal(const XMFLOAT3& point) const {
+    XMFLOAT4 worldOrigin;
+    XMStoreFloat4(&worldOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
+                                XMLoadFloat4x4(&this->getTransformation())));
+
+    XMVECTOR vec1 = XMLoadFloat3(&point);
+    XMVECTOR vec2 = XMLoadFloat3(&XMFLOAT3(worldOrigin.x, worldOrigin.y, worldOrigin.z));
+    XMFLOAT3 normal;
+    XMStoreFloat3(&normal, XMVector3Normalize(vec1 - vec2));
+    
+    return normal;
+}
+
+bool Sphere::intersect(const Ray& ray, float& tOut) const {
     double A, B, C;
 
 	XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
 
 	// TODO Transform from world coordinate system to sphere's local coordinate system
+    XMFLOAT4 worldOrigin;
+    XMStoreFloat4(&worldOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
+                                XMLoadFloat4x4(&this->getTransformation())));
 
 	A = 1;
-	B = ( t_dir.x * t_pos.x + t_dir.y * t_pos.y + t_dir.z * t_pos.z ) * 2;
-	C = pow( t_pos.x, 2 ) + pow( t_pos.y, 2 ) + pow( t_pos.z, 2 ) - pow( m_radius, 2 );
+	B = 2 * ( (t_dir.x * (t_pos.x - worldOrigin.x)) + (t_dir.y * (t_pos.y - worldOrigin.y)) + (t_dir.z * (t_pos.z - worldOrigin.z)) );
+	C = pow( (t_pos.x - worldOrigin.x), 2 ) + pow( (t_pos.y - worldOrigin.y), 2 ) + pow( (t_pos.z - worldOrigin.z), 2 ) - pow( m_radius, 2 );
 
-	double delta = pow( B, 2 ) - 4 * C;
+	double delta = pow( B, 2 ) - (4 * A * C);
 
 	if( delta < 0 )
 	{
@@ -69,20 +86,44 @@ double Cube::GetEdgeLen()
 	return m_edgeLen;
 }
 
+XMFLOAT3 Cube::getNormal(const XMFLOAT3& point) const {
+    double edgeLen = m_edgeLen;
+    double box_min[ 3 ] = { -edgeLen / 2.0, -edgeLen / 2.0f, -edgeLen / 2.0f };
+	double box_max[ 3 ] = { edgeLen / 2.0, edgeLen / 2.0f, edgeLen / 2.0f };
 
+    if(abs(point.x - box_min[0]) < 0.1) 
+          return XMFLOAT3(-1.f, 0.f, 0.f);
+    else if(abs(point.x - box_max[0]) < 0.1) 
+           return XMFLOAT3(1.f, 0.f, 0.f);
+    else if(abs(point.y - box_min[1]) < 0.1) 
+           return XMFLOAT3(0.f, -1.f, 0.f);
+    else if(abs(point.y - box_max[1]) < 0.1) 
+          return XMFLOAT3(0.f, 1.f, 0.f);
+    else if(abs(point.z - box_min[2]) < 0.1) 
+          return XMFLOAT3(0.f, 0.f, -1.f);
+    else if(abs(point.z - box_max[2]) < 0.1) 
+          return XMFLOAT3(0.f, 0.f, 1.f);
+    else 
+        return XMFLOAT3(0.f, 0.f, 0.f);
+}
 
-bool Cube::intersect(const Ray& ray, double& tOut) const {
+bool Cube::intersect(const Ray& ray, float& tOut) const {
     XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
 
 	// TODO Transform from world coordinate system to sphere's local coordinate system
+    
+    XMMATRIX world = XMLoadFloat4x4(&this->getTransformation());
+    XMMATRIX inverse = XMMatrixInverse(&XMMatrixDeterminant(world), world);
+    XMStoreFloat3(&t_pos, XMVector3Transform(XMLoadFloat3(&t_pos), inverse));
+    //XMStoreFloat3(&t_dir, XMVector3Normalize(XMVector3Transform(XMLoadFloat3(&t_dir), inverse)));
 
 	double edgeLen = m_edgeLen;
 
 	double box_min[ 3 ] = { -edgeLen / 2.0, -edgeLen / 2.0f, -edgeLen / 2.0f };
 	double box_max[ 3 ] = { edgeLen / 2.0, edgeLen / 2.0f, edgeLen / 2.0f };
 	double t_arrayDir[ 3 ] = { t_dir.x, t_dir.y, t_dir.z };
-	double t_arrayPos[ 3 ] = { t_pos.x, t_dir.y, t_dir.z };
+	double t_arrayPos[ 3 ] = { t_pos.x, t_pos.y, t_pos.z };
 	double T_near = -999999.0f, T_far = 999999.0f;
 
 	int sideRecorder = -1;
@@ -161,7 +202,7 @@ bool Cube::intersect(const Ray& ray, double& tOut) const {
 }
 
 
-bool GeometryPrimitive::intersect(const Ray& ray, double& tOut) const {
+bool GeometryPrimitive::intersect(const Ray& ray, float& tOut) const {
     return false;
 }
 
@@ -178,6 +219,6 @@ double Square::GetEdgeLen()
 	return m_edgeLen;
 }
 
-bool Square::intersect(const Ray& ray, double& tOut) const {
+bool Square::intersect(const Ray& ray, float& tOut) const {
     return false;
 }
