@@ -3,6 +3,10 @@
 Image::Image(int width, int height) 
 : _width(width), _height(height) {
     _buffer = new XMFLOAT4[_width * _height];
+
+    for(int i(0); i < _width*_height; ++i) {
+        _buffer[i] = XMFLOAT4(1.f, 1.f, 1.f, 1.f);
+    }
 }
 
 Image::~Image() {
@@ -29,4 +33,8 @@ unsigned int Image::getWidth() const {
 
 unsigned int Image::getHeight() const {
     return _height; 
+}
+
+XMFLOAT4* Image::getBuffer() const {
+    return _buffer;
 }

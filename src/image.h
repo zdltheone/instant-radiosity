@@ -13,6 +13,8 @@ public:
 
     unsigned int getWidth() const;
     unsigned int getHeight() const;
+
+    XMFLOAT4* getBuffer() const;
 private:
     int _width;
     int _height;

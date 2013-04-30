@@ -9,6 +9,6 @@ SamplerState samp : register(s0);
 
 float4 main(PixelIn input) : SV_TARGET
 {	
-	//return tex.Sample(samp, input.tex);
-    return float4(1.f, 0.f, 0.f, 1.f);
+	return tex.Sample(samp, input.tex);
+    //return float4(1.f, 0.f, 0.f, 1.f);
 }

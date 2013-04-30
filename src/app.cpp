@@ -125,8 +125,51 @@ void App::Run()
 
     XMLLoader::parseSceneXML("src/example_scene.xml");
 
-    Image imageBuffer(200, 200);
-    _raytracer->raytrace(&scene, &imageBuffer);
+    Image* imageBuffer = new Image(200, 200);
+    _raytracer->raytrace(&scene, imageBuffer);
+
+
+    ID3D11Texture2D* imageTex;
+    ID3D11ShaderResourceView* imageSRV;
+
+    //Create the noise texture
+	D3D11_TEXTURE2D_DESC td;
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd;
+	HRESULT hret;
+
+	ZeroMemory(&td, sizeof(td));
+    td.Width			= imageBuffer->getWidth();
+	td.Height			= imageBuffer->getHeight();
+	td.MipLevels		= 1;
+	td.ArraySize		= 1;
+	td.Format			= DXGI_FORMAT_R32G32B32A32_FLOAT;
+	td.SampleDesc.Count	= 1;
+	td.Usage			= D3D11_USAGE_IMMUTABLE;
+	td.BindFlags		= D3D11_BIND_SHADER_RESOURCE;
+	td.CPUAccessFlags	= 0;
+	td.MiscFlags		= 0;
+
+	D3D11_SUBRESOURCE_DATA srd;
+    ZeroMemory(&srd, sizeof(srd));
+	srd.pSysMem = imageBuffer->getBuffer();
+	srd.SysMemPitch = imageBuffer->getWidth() * sizeof(XMFLOAT4);
+
+	hret = _device->CreateTexture2D(&td, &srd, &imageTex);
+	if(FAILED(hret)) {
+		return;
+	}
+
+	srvd.Format						= td.Format;
+	srvd.ViewDimension				= D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MostDetailedMip	= 0;
+	srvd.Texture2D.MipLevels		= 1;
+	hret = _device->CreateShaderResourceView(imageTex, &srvd, &imageSRV);
+	if(FAILED(hret)) {
+		return;
+
+	}
+
+    _deviceContext->PSSetShaderResources(0, 1, &imageSRV);
 
 
 	bool done = false;
