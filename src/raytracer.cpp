@@ -15,27 +15,27 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     const Camera* camera = scene->getCamera();
     assert(camera);
 
-    XMFLOAT3 origin = camera->getPosition();
+    XMFLOAT3 cameraOrigin;
+    XMStoreFloat3(&cameraOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
+        XMLoadFloat4x4(&camera->getView())));
+
     float right  = camera->getNearClip() * tan(toRadians(camera->getXFoV() / 2.f)); 
     float left   = -1.f * right;
     float bottom = camera->getNearClip() * tan(toRadians(camera->getYFoV() / 2.f));
     float top    = -1.f * bottom;
     float dx = (right - left) / imageBuffer->getWidth();
     float dy = (top - bottom) / imageBuffer->getHeight();
-    float xOffset = dx / 2.f;
-    float yOffset = dy / 2.f;
-
 
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
         for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
-            XMFLOAT3 dir(left + row*(dx + xOffset), 
-                         bottom + col*(dy + yOffset), 
-                         origin.z + camera->getNearClip());
+            XMFLOAT3 dir(left + col*(dx), 
+                         bottom + row*(dy), 
+                         cameraOrigin.z + camera->getNearClip());
 
             math_normalize(dir);
 
-            XMFLOAT3 color = traceRay(Ray(origin, dir), 0);
-        
+            XMFLOAT3 color = traceRay(Ray(cameraOrigin, dir), 0);
+            
             imageBuffer->setPixel(row, col, XMFLOAT4(color.x, color.y, color.z, 1.f));
         }
     }
@@ -51,11 +51,21 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
 
     XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
     XMFLOAT3 normal = primitive->getNormal(intersectPoint);
+    XMFLOAT3 color = primitive->color;
 
+    //quick lighting for testing intersections
+    XMFLOAT3 L(1,-1,-1);
+    math_normalize(L);
+    XMFLOAT3 contrib;
+    XMStoreFloat3(&contrib, XMVector3Dot(XMLoadFloat3(&L), XMLoadFloat3(&normal)) *  XMLoadFloat3(&color) + XMLoadFloat3(&XMFLOAT3(0.1f, 0.1f, 0.1f)) * XMLoadFloat3(&color));
+    
+   
     if(depth > _maxDepth) {
         return XMFLOAT3(); //fix this 
     }
 
+    //return XMFLOAT3(1.f, 1.f, 1.f);
+    return contrib;
     //check if object is diffuse or specular
     // if diffuse -> accumulate radiance from vpls and light sources
    

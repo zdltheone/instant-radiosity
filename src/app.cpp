@@ -47,10 +47,10 @@ void App::InitApp()
 	_deviceContext->PSSetSamplers(0, 1, &_sampler);
 
     float verts[20] = 
-        { -0.5f,  0.5f, 0.f, 0.f, 1.f,   //tl
-           0.5f,  0.5f, 0.f, 1.f, 1.f,   //tr
-           0.5f, -0.5f, 0.f, 1.f, 0.f,   //br
-          -0.5f, -0.5f, 0.f, 0.f, 0.f }; //bl
+        { -0.75f,  0.75f, 0.f, 0.f, 1.f,   //tl
+           0.75f,  0.75f, 0.f, 1.f, 1.f,   //tr
+           0.75f, -0.75f, 0.f, 1.f, 0.f,   //br
+          -0.75f, -0.75f, 0.f, 0.f, 0.f }; //bl
     unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
 
     D3D11_BUFFER_DESC vbd;
@@ -109,24 +109,9 @@ void App::Render() {
 void App::Run()
 {
 
-    Scene scene;
-    Camera camera;
-    Sphere s1;
-    Cube c1;
-    s1.SetRadius(10);
-    s1.SetCenter(XMFLOAT3(10, 10, 10));
-    c1.SetEdgeLen(10);
-    c1.SetCenter(XMFLOAT3(-10, -10, 10));
-
-    scene.addPrimitive(&c1);
-    scene.addPrimitive(&s1);
-    scene.setCamera(&camera);
-
-
-    XMLLoader::parseSceneXML("src/example_scene.xml");
-
-    Image* imageBuffer = new Image(200, 200);
-    _raytracer->raytrace(&scene, imageBuffer);
+    Scene* scene = XMLLoader::parseSceneXML("src/example_scene.xml");
+    Image* imageBuffer = new Image(800, 600);
+    _raytracer->raytrace(scene, imageBuffer);
 
 
     ID3D11Texture2D* imageTex;

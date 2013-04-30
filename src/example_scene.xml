@@ -14,18 +14,9 @@
     <target x="0" y="0" z="10"/>
   </areaLight>
   
-  <square edgelen="2">
-    <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
-    <scale x="2" y="2" z="1"/>
-    <translate x="2" y="1" z="10"/>
-  </square>
-  
-  <cube edgelen="3">
-    <rotate axisX="1" axisY="0" axisZ="0" degrees="90"/>
-    <translate x="-2" y="5" z="10"/>
+  <cube edgelen="4">
+    <translate x="0" y="0" z="10"/>
+    <color r="0.66" g="0.25" b="0"/>
   </cube>
   
-  <sphere radius="2">
-    <translate x="-5" y="3" z="12"/>
-  </sphere>
 </scene>
