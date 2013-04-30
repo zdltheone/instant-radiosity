@@ -30,3 +30,14 @@ void math_normalize(XMFLOAT3& vec) {
 
     XMStoreFloat3(&vec, v);
 }
+
+XMFLOAT3 XMFloat3Sub( const XMFLOAT3& point1, const XMFLOAT3& point2 )
+{
+	XMVECTOR p1 = XMLoadFloat3( &point1 );
+	XMVECTOR p2 = XMLoadFloat3( &point2 );
+	XMVECTOR subResult = XMVectorSubtract( p1, p2 );
+	XMFLOAT3 result;
+	XMStoreFloat3( &result, subResult );
+
+	return result;
+}

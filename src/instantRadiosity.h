@@ -7,7 +7,7 @@
 #include "light.h"
 #include "util.h"
 #include "geometryObjects.h"
-#include "raytracer.h"
+#include "scene.h"
 
 using namespace std;
 
@@ -22,7 +22,8 @@ public:
 	unsigned int GetReflectionNum();
 	void SetSampleNum( unsigned int number );
 	unsigned int GetSampleNum();
-	void EmitVPLs( vector<AreaLight>* areaLightContainer, double average_reflectivity, RayTracer* raytracer );
+	void EmitVPLs( vector<AreaLight>* areaLightContainer, double average_reflectivity, Scene* scene );
+	XMFLOAT4 GetRadiance( XMFLOAT3 intersectionPoint, Scene* scene );
 
 private:
 	RandomNumberGenerator m_rngGenerator;

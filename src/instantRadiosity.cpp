@@ -1,4 +1,5 @@
 #include "instantRadiosity.h"
+#include "math.h"
 
 InstantRadiosity::InstantRadiosity()
 {
@@ -34,7 +35,7 @@ unsigned int InstantRadiosity::GetSampleNum()
 	return m_sampleNum;
 }
 
-void InstantRadiosity::EmitVPLs( vector<AreaLight>* areaLightContainer, double average_reflectivity, RayTracer* raytracer )
+void InstantRadiosity::EmitVPLs( vector<AreaLight>* areaLightContainer, double average_reflectivity, Scene* scene )
 {
 	AreaLight areaLight = (*areaLightContainer)[ 0 ];
 	double    lightAttenuationFactor = 0.8;
@@ -72,13 +73,13 @@ void InstantRadiosity::EmitVPLs( vector<AreaLight>* areaLightContainer, double a
 			rad.z *= 0.5 / acos( -1 );
 			rad.w *= 0.5 / acos( -1 );
 
-			double t;
+			float t;
 			// Normalized the light direction
 			XMVECTOR tmp = XMLoadFloat3( &lightDirection );
 			tmp = XMVector3Normalize( tmp );
 			XMStoreFloat3( &lightDirection, tmp );
 
-			raytracer->traceRayOnce( Ray( lightStartPoint, lightDirection ), t );
+			scene->intersectScene( Ray( lightStartPoint, lightDirection ), t );
 
 			// Ray hit nothing so we terminate this path
 			if( t < 0 )
@@ -92,4 +93,49 @@ void InstantRadiosity::EmitVPLs( vector<AreaLight>* areaLightContainer, double a
 			lightStartPoint.z *= t;
 		}
 	}
+}
+
+XMFLOAT4 InstantRadiosity::GetRadiance( XMFLOAT3 intersectionPoint, Scene* scene )
+{
+	XMFLOAT4 accumulateContribution;
+	vector<PointLight> pointLight = ()scene->getLights();
+	for( int i = 0; i < pointLight.size(); i++ )
+	{
+		float t;
+		XMFLOAT3 pointToVPL = XMFloat3Sub( pointLight[ i ].getPosition(), intersectionPoint );
+		// Get the normal of hitpoint
+		XMFLOAT3 hitPointSurfaceNormal;
+
+		// Evaluate BRDF
+		XMVECTOR pointToVPLVec = XMLoadFloat3( &pointToVPL );
+		XMVECTOR hitPointSurfaceNormalVec = XMLoadFloat3( &hitPointSurfaceNormal );
+		XMVECTOR dotResult = XMVector3Dot( pointToVPLVec, hitPointSurfaceNormalVec );
+		XMFLOAT3 dotResultFloat3;
+		XMStoreFloat3( &dotResultFloat3, dotResult );
+		float diffuse = dotResultFloat3.x;
+
+		// Check whether any object obscured the light to this hitpoint
+		scene->intersectScene( Ray( intersectionPoint, pointToVPL ), t );
+		XMFLOAT3 testRayHitPoint( intersectionPoint.x * t, intersectionPoint.y * t, intersectionPoint.z * t );
+
+		float dis1 = math_length( pointToVPL );
+		float dis2 = math_distance( intersectionPoint, testRayHitPoint );
+
+		// Accumulate light contribution if the virtual point light's radiance can reach this point
+		if( fabs( dis1 - dis2 ) < 0.001f )
+		{
+			XMFLOAT4 plColor = pointLight[ i ].color;
+			float factor = 1.0f / pointLight.size() * diffuse;
+			plColor.x *= factor;
+			plColor.y *= factor;
+			plColor.z *= factor;
+			plColor.w *= factor;
+			accumulateContribution.x += plColor.x;
+			accumulateContribution.y += plColor.y;
+			accumulateContribution.z += plColor.z;
+			accumulateContribution.w += plColor.w;
+		}
+ 	}
+
+	return accumulateContribution;
 }

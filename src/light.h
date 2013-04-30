@@ -47,6 +47,4 @@ struct AreaLight : public Light
 	}
 };
 
-
-
 #endif

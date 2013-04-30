@@ -12,5 +12,7 @@ float math_distance(const XMFLOAT3& point1, const XMFLOAT3& point2);
 float toRadians(float degrees);
 void math_normalize(XMFLOAT3& vec);
 
+XMFLOAT3 XMFloat3Sub( const XMFLOAT3& point1, const XMFLOAT3& point 2 );
+
 
 #endif
