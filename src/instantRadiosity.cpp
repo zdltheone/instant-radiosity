@@ -105,15 +105,13 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 	}
 }
 
-XMFLOAT4 InstantRadiosity::GetRadiance( XMFLOAT3 intersectionPoint, Scene* scene )
+XMFLOAT4 InstantRadiosity::GetRadiance( const XMFLOAT3& intersectionPoint, const XMFLOAT3& hitPointSurfaceNormal, const Scene* scene )
 {
 	XMFLOAT4 accumulateContribution;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
 		float t;
 		XMFLOAT3 pointToVPL = XMFloat3Sub( m_VPLVec[ i ].getPosition(), intersectionPoint );
-		// Get the normal of hitpoint
-		XMFLOAT3 hitPointSurfaceNormal;
 
 		// Evaluate BRDF
 		XMVECTOR pointToVPLVec = XMLoadFloat3( &pointToVPL );
