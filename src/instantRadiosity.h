@@ -22,7 +22,7 @@ public:
 	unsigned int GetReflectionNum();
 	void SetSampleNum( unsigned int number );
 	unsigned int GetSampleNum();
-	void EmitVPLs( vector<AreaLight>* areaLightContainer, double average_reflectivity, Scene* scene );
+	void EmitVPLs( double average_reflectivity, Scene* scene );
 	XMFLOAT4 GetRadiance( XMFLOAT3 intersectionPoint, Scene* scene );
 
 private:
