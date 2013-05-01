@@ -14,9 +14,9 @@
     <target x="0" y="0" z="10"/>
   </areaLight>
   
-  <cube edgelen="4">
+  <sphere radius="4">
     <translate x="0" y="0" z="10"/>
     <color r="0.66" g="0.25" b="0"/>
-  </cube>
+  </sphere>
   
 </scene>
