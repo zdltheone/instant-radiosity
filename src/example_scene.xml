@@ -1,3 +1,65 @@
+<!---
+<camera> - create a camera in the scene (can only be one)
+  <perspective near="" far="" xfov="" yfov="" width="" height=""/> - setup persepective matrix of camera
+    -near -> nearClip distance
+    -far  -> farClip distance
+    -xfov -> field of view in degrees in x direction
+    -yfov -> field of view in degrees in y direction
+    -width -> width of view rect   (default 800) 
+    -height -> height of view rect (default 600)
+  <lookat x="" y="" z="" upX="" upY="" upZ=""/> - setup view matrix of camera ------ this doesnt work right now
+    - x,y,z -> position to look camera at 
+    - upX, upY, upZ -> up direction of camera
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+  
+<pointLight> - create a point light in the scene
+  <translate x="" y="" z=""/> 
+  <color r="" g="" b=""/>
+  
+<areaLight> - create arealight in the scene
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+  <color r="" g="" b=""/> - color or light
+  <target x="" y="" z=""/> - where to point light at --- not used yet
+  <scale x="" y="" z="" /> - scale size of light
+  
+<sphere radius="">
+  <color r="" g="" b=""/> - diffuse color of sphere
+  <scale x="" y="" z="" /> - scale size of sphere
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+
+<cube edgelen="">
+  <color r="" g="" b=""/> - diffuse color of sphere
+  <scale x="" y="" z="" /> - scale size of sphere
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+
+<square edgelen="">
+  <color r="" g="" b=""/> - diffuse color of sphere
+  <scale x="" y="" z="" /> - scale size of sphere
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+
+-->
+
+
 <scene>
   <camera>
     <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
