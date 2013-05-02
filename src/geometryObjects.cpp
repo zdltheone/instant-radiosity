@@ -219,6 +219,29 @@ double Square::GetEdgeLen()
 	return m_edgeLen;
 }
 
-bool Square::intersect(const Ray& ray, float& tOut) const {
-    return false;
+bool Square::intersect( const Ray& ray, float& tOut ) const 
+{
+	XMFLOAT3 t_pos = ray.position;
+	XMFLOAT3 t_dir = ray.direction;
+
+	XMMATRIX world = XMLoadFloat4x4( &this->getTransformation() );
+	XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
+	XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
+	XMStoreFloat3( &t_dir, XMVector3Transform( XMLoadFloat3(&t_dir), inverse ) );
+
+	double t = ( -1.0f * t_dir.y ) / t_pos.y;
+	XMFLOAT3 intersectionPoint = XMFLOAT3( t_pos.x + t_dir.x * t, t_pos.y + t_dir.y * t, t_pos.z + t_dir.z * t );
+	if( intersectionPoint.x < -m_edgeLen || intersectionPoint.x > m_edgeLen )
+	{
+		return false;
+	}
+
+	if( intersectionPoint.z < -m_edgeLen || intersectionPoint.z > m_edgeLen )
+	{
+		return false;
+	}
+
+	tOut = t;
+
+    return true;
 }
