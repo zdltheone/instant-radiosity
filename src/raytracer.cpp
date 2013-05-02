@@ -4,7 +4,7 @@
 RayTracer::RayTracer(unsigned int maxDepth) {
     _scene = NULL;
     _maxDepth = maxDepth;
-    //_instantRadiosity = new InstantRadiosity();
+    _instantRadiosity = new InstantRadiosity();
 }
 
 void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
@@ -25,6 +25,9 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     float top    = -1.f * bottom;
     float dx = (right - left) / imageBuffer->getWidth();
     float dy = (top - bottom) / imageBuffer->getHeight();
+
+
+   // _instantRadiosity->EmitVPLs(1.f, scene);
 
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
         for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
@@ -62,10 +65,11 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     XMFLOAT3 contrib;
     XMStoreFloat3(&contrib, XMVector3Dot(XMLoadFloat3(&L), XMLoadFloat3(&normal)) *  XMLoadFloat3(&color) + XMLoadFloat3(&XMFLOAT3(0.1f, 0.1f, 0.1f)) * XMLoadFloat3(&color));
     
-   
     if(depth > _maxDepth) {
         return XMFLOAT3(); //fix this 
     }
+
+  //  XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, scene)) * XMLoadFloat3(&color);
 
     return XMFLOAT3(1.f, 1.f, 1.f);
     return contrib;
