@@ -64,7 +64,7 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
         return XMFLOAT3(); //fix this 
     }
 
-    XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, scene)) * XMLoadFloat3(&color);
+    XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, _scene)) * XMLoadFloat3(&color);
    
 
 
