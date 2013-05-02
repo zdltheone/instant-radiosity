@@ -66,7 +66,7 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
   //  XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, scene)) * XMLoadFloat3(&color);
    
 
-
+	_instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
 
     return color;
     //check if object is diffuse or specular

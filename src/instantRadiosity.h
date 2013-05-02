@@ -7,6 +7,7 @@
 #include "light.h"
 #include "util.h"
 #include "geometryObjects.h"
+#include "primitive.h"
 #include "scene.h"
 
 using namespace std;

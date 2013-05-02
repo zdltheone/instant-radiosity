@@ -75,7 +75,8 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			translatedVec = XMVector3Transform( translatedVec, transMatrix );
 			XMStoreFloat3( &pointAtSampleSphere, translatedVec );
 			
-			cout << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
+			cout << "Light Start Point " << lightStartPoint.x << " " << lightStartPoint.y << " " << lightStartPoint.z << endl;
+			cout << "Point at Sphere Surface " << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
 
 			// Calculate the reflection direction
 			XMFLOAT3 lightDirection( pointAtSampleSphere.x - lightStartPoint.x, pointAtSampleSphere.y - lightStartPoint.y, pointAtSampleSphere.z - lightStartPoint.z );
@@ -96,25 +97,17 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			XMStoreFloat3( &lightDirection, tmp );
             
             XMFLOAT3 normal;
-			if( scene->intersectScene( Ray( lightStartPoint, lightDirection ), normal, t ) == NULL )
+			const Primitive *primitive;
+			if( ( primitive = scene->intersectScene( Ray( lightStartPoint, lightDirection ), normal, t ) ) == NULL || t < 0 )
 			{
 				break;
 			}
-
-			// Ray hit nothing so we terminate this path
-			if( t < 0 )
-			{
-				break;
-			}
-
 
 			cout << t << endl;
 			// Calculate the hit point;
 			lightStartPoint.x *= t;
 			lightStartPoint.y *= t;
 			lightStartPoint.z *= t;
-
-			//cout << lightStartPoint.x << " " << lightStartPoint.y << " " << lightStartPoint.z << endl;
 		}
 	}
 }
