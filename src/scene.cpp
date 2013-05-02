@@ -1,4 +1,5 @@
 #include "scene.h"
+#include <iostream>
 
 Scene::Scene() {
     _camera = NULL;
@@ -43,7 +44,10 @@ const Primitive* Scene::intersectScene(const Ray& ray, XMFLOAT3& normalOut, floa
 
         //if we have an interection, do a depth test
         if(primitive->intersect(ray, normalOut, tOut)) {
-            assert(tOut > EPSILON);
+            if(tOut <= EPSILON) {
+                std::cout << "intersection < EPSILON" << std::endl;
+                continue;
+            }
             XMFLOAT3 intersection;
             ray.getPointAlongRay(tOut, intersection);
 
