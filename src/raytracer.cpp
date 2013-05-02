@@ -27,8 +27,8 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     float dy = (top - bottom) / imageBuffer->getHeight();
 
 
-    _instantRadiosity->SetReflectionNum( 2 );
-    _instantRadiosity->SetSampleNum( 5 );
+    _instantRadiosity->SetReflectionNum( 5 );
+    _instantRadiosity->SetSampleNum( 1 );
 	_instantRadiosity->EmitVPLs( 0.5f, scene );
 
 
