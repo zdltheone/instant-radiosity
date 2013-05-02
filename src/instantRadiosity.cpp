@@ -82,14 +82,17 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			rad.z *= 0.5 / acos( -1 );
 			rad.w *= 0.5 / acos( -1 );
 
-			float t;
+			float t = -1.0f;
 			// Normalized the light direction
 			XMVECTOR tmp = XMLoadFloat3( &lightDirection );
 			tmp = XMVector3Normalize( tmp );
 			XMStoreFloat3( &lightDirection, tmp );
             
             XMFLOAT3 normal;
-			scene->intersectScene( Ray( lightStartPoint, lightDirection ), normal, t );
+			if( scene->intersectScene( Ray( lightStartPoint, lightDirection ), normal, t ) == NULL )
+			{
+				break;
+			}
 
 			cout << t << endl;
 
