@@ -25,8 +25,8 @@ void ShaderProgram::CompileShaders(std::wstring vs_fpath, std::wstring ps_fpath)
 	//Compile shaders
 	//hret = D3DX11CompileFromFile(vs_fpath.c_str(), 0, 0, "main", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS,
 	//	0, 0, &vsBuffer, &errorMessage, 0 );
-	hret = D3DX11CompileFromFile(L"../src/basic.vsh", 0, 0, "main", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS,
-		0, 0, &vsBuffer, &errorMessage, 0 );
+	hret = D3DCompileFromFile(vs_fpath.c_str(), 0, 0, "main", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS,
+		0, &vsBuffer, &errorMessage);
 	if(FAILED(hret))
 	{
 		if(errorMessage) { HandleCompileError(errorMessage); return; }
@@ -35,8 +35,8 @@ void ShaderProgram::CompileShaders(std::wstring vs_fpath, std::wstring ps_fpath)
 	}
 	//hret = D3DX11CompileFromFile(ps_fpath.c_str(), 0, 0, "main", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS,
 	//	0, 0, &psBuffer, &errorMessage, 0 );
-	hret = D3DX11CompileFromFile(L"../src/basic.psh", 0, 0, "main", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS,
-		0, 0, &psBuffer, &errorMessage, 0 );
+	hret = D3DCompileFromFile(ps_fpath.c_str(), 0, 0, "main", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS,
+		0, &psBuffer, &errorMessage);
 	if(FAILED(hret))
 	{
 		if(errorMessage) { HandleCompileError(errorMessage); return; }

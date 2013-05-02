@@ -202,8 +202,7 @@ double Square::GetEdgeLen()
 	return m_edgeLen;
 }
 
-<<<<<<< HEAD
-bool Square::intersect( const Ray& ray, float& tOut ) const 
+bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const 
 {
 	XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
@@ -228,45 +227,4 @@ bool Square::intersect( const Ray& ray, float& tOut ) const
 	tOut = t;
 
     return true;
-=======
-bool Square::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
-    //Squares are in the xz-plane in local coords
-	XMFLOAT3 ro_l, ro_v, intersection;
-	XMFLOAT3 rd_l, rd_v;
-	double t;
-   
-    XMVECTOR dirLocal, posLocal;
-    XMVECTOR rayD = XMLoadFloat3(&ray.direction);
-    XMVECTOR rayO = XMLoadFloat3(&ray.position);
-    XMMATRIX world = XMLoadFloat4x4(&this->getTransformation());
-    XMMATRIX inverse = XMMatrixInverse(&XMMatrixDeterminant(world), world);
-
-	//Transform ray into local space
-    
-	dirLocal = XMVector3Transform(rayD, inverse);
-    posLocal = XMVector3Transform(rayO, inverse);
-
-    XMStoreFloat3(&ro_l, posLocal);
-    XMStoreFloat3(&rd_l, dirLocal);
-
-	//Calculate ray intersection -- xz plane so A=0 B=1 C=0 D=0
-	t = -1 * (ro_l.y / rd_l.y);
-
-	//Zero or Negative t values are no good
-	if((t <= 0.0 + EPSILON && t >= 0.0 - EPSILON) || t <= 0.0 + EPSILON) return false;
-
-	//Calculate intersection point(in local space)
-    Ray localRay(ro_l, rd_l);
-    intersection = localRay.getPointAlongRay(t);
-
-	//check for ray intersection along x and z coords
-	if(intersection.x >= -m_edgeLen / 2.0 && intersection.x <= m_edgeLen / 2.0 &&
-		intersection.z >= -m_edgeLen / 2.0 && intersection.z <= m_edgeLen / 2.0) {
-		tOut = t;
-		return true;
-	}
-	else {
-		return false; 
-	}
->>>>>>> c3fcd731d6d0e7b31e4923f1fe8b7d3dca98e0de
 }
