@@ -67,7 +67,7 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
         return XMFLOAT3(); //fix this 
     }
 
-    //return XMFLOAT3(1.f, 1.f, 1.f);
+    return XMFLOAT3(1.f, 1.f, 1.f);
     return contrib;
     //check if object is diffuse or specular
     // if diffuse -> accumulate radiance from vpls and light sources
