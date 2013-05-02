@@ -130,9 +130,13 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		XMStoreFloat3( &dotResultFloat3, dotResult );
 		float diffuse = dotResultFloat3.x;
 
-		// Check whether any object obscured the light to this hitpoint
+		// Shoot shadow ray
         XMFLOAT3 normal;
-		scene->intersectScene( Ray( intersectionPoint, pointToVPL ), normal, t );
+		if( scene->intersectScene( Ray( intersectionPoint, pointToVPL ), normal, t ) == NULL || fabs( t ) < 0.0001f )
+		{
+			continue;
+		}
+
 		XMFLOAT3 testRayHitPoint( intersectionPoint.x * t, intersectionPoint.y * t, intersectionPoint.z * t );
 
 		float dis1 = math_length( pointToVPL );
