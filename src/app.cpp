@@ -111,7 +111,7 @@ void App::Render() {
 void App::Run()
 {
 
-    Scene* scene = XMLLoader::parseSceneXML("../src/example_scene.xml");
+    Scene* scene = XMLLoader::parseSceneXML("src/Cornell Box.xml");
     Image* imageBuffer = new Image(800, 600);
 	//InstantRadiosity ir;
 	//ir.SetReflectionNum( 10 );

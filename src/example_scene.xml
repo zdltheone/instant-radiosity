@@ -66,10 +66,7 @@
     <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
     <translate x="0" y="0" z="0"/>
   </camera>
-  
-  <pointLight>
-    <color r="1" g="1" b="1"/>
-  </pointLight>
+
   
   <areaLight width="" height="">
     <color r="1" g="1" b="1"/>

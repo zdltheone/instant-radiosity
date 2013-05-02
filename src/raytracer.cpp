@@ -27,7 +27,7 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     float dy = (top - bottom) / imageBuffer->getHeight();
 
 
-    _instantRadiosity->EmitVPLs(1.f, scene);
+   // _instantRadiosity->EmitVPLs(1.f, scene);
 
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
         for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
@@ -56,9 +56,6 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
     XMFLOAT3 color = primitive->color;
 
-
-
-
     //quick lighting for testing intersections
     XMFLOAT3 L(1,-1,-1);
     math_normalize(L);
@@ -71,7 +68,6 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
 
   //  XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, scene)) * XMLoadFloat3(&color);
 
-    return XMFLOAT3(1.f, 1.f, 1.f);
     return contrib;
     //check if object is diffuse or specular
     // if diffuse -> accumulate radiance from vpls and light sources
