@@ -22,7 +22,7 @@ public:
 	unsigned int GetReflectionNum();
 	void SetSampleNum( unsigned int number );
 	unsigned int GetSampleNum();
-	void EmitVPLs( double average_reflectivity, Scene* scene );
+	void EmitVPLs( double average_reflectivity, const Scene* scene );
 	XMFLOAT4 GetRadiance( XMFLOAT3 intersectionPoint, XMFLOAT3 intersectionNormal, Scene* scene );
 
 private:
