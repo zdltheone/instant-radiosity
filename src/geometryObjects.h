@@ -10,8 +10,7 @@
 class SolidGeometryPrimitive : public Primitive
 {
 public:
-	SolidGeometryPrimitive() : m_surfaceArea( 0.0f ), m_volume( 0.0f ), m_center( XMFLOAT3( 0.0f, 0.0f, 0.0f ) ){}
-	SolidGeometryPrimitive( const SolidGeometryPrimitive& otherInstance ) : m_surfaceArea( 0.0f ), m_volume( 0.0f ), m_center( XMFLOAT3( 0.0f, 0.0f, 0.0f ) ){}
+	SolidGeometryPrimitive(Primitive::PrimitiveType type) : Primitive(type), m_surfaceArea( 0.0f ), m_volume( 0.0f ), m_center( XMFLOAT3( 0.0f, 0.0f, 0.0f ) ){}
 	~SolidGeometryPrimitive(){}
 
 public:
@@ -29,8 +28,7 @@ private:
 class Sphere : public SolidGeometryPrimitive
 {
 public:
-	Sphere() : m_radius( 0.0f ){}
-	Sphere( const Sphere& otherInstance ) : m_radius( 0.0f ){}
+    Sphere() : SolidGeometryPrimitive(PrimitiveType::Sphere), m_radius( 0.0f ){};
 	~Sphere(){}
 
 	void SetRadius( double radius );
@@ -46,8 +44,7 @@ private:
 class Cube : public SolidGeometryPrimitive
 {
 public:
-	Cube() : m_edgeLen( 0.0f ){}
-	Cube( const Cube& otherInstance ) : m_edgeLen( 0.0f ){}
+    Cube() : SolidGeometryPrimitive(PrimitiveType::Cube), m_edgeLen( 0.0f ){}
 	~Cube(){}
 
 	void SetEdgeLen( double length );
@@ -65,8 +62,7 @@ private:
 class GeometryPrimitive : public Primitive
 {
 public:
-	GeometryPrimitive() : m_area( 0.0f ){};
-	GeometryPrimitive( const GeometryPrimitive& otherInstance ) : m_area( 0.0f ){};
+    GeometryPrimitive(Primitive::PrimitiveType type) : Primitive(type), m_area( 0.0f ){};
 	~GeometryPrimitive(){};
 
     virtual bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
@@ -78,8 +74,7 @@ private:
 class Square : public GeometryPrimitive
 {
 public:
-	Square() : m_edgeLen( 0.0f ){}
-	Square( const Square& otherInstance ) : m_edgeLen( 0.0f ){}
+    Square() : GeometryPrimitive(PrimitiveType::Square), m_edgeLen( 0.0f ){}
 	~Square();
 
 	void SetEdgeLen( double length );
