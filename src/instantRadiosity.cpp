@@ -39,7 +39,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 {
 	AreaLight areaLight;
 	areaLight.direction = XMFLOAT3( 0.0f, -1.0f, 0.0f );
-	areaLight.color = XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f );
+	areaLight.power = XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f );
 	areaLight.width = 100;
 	areaLight.height = 100;
 	double    lightAttenuationFactor = 0.8;
@@ -84,8 +84,9 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			XMVECTOR tmp = XMLoadFloat3( &lightDirection );
 			tmp = XMVector3Normalize( tmp );
 			XMStoreFloat3( &lightDirection, tmp );
-
-			scene->intersectScene( Ray( lightStartPoint, lightDirection ), t );
+            
+            XMFLOAT3 normal;
+			scene->intersectScene( Ray( lightStartPoint, lightDirection ), normal, t );
 
 			cout << t << endl;
 
@@ -105,13 +106,15 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 	}
 }
 
-XMFLOAT4 InstantRadiosity::GetRadiance( const XMFLOAT3& intersectionPoint, const XMFLOAT3& hitPointSurfaceNormal, const Scene* scene )
+XMFLOAT4 InstantRadiosity::GetRadiance( XMFLOAT3 intersectionPoint, XMFLOAT3 intersectionNormal, Scene* scene )
 {
 	XMFLOAT4 accumulateContribution;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
 		float t;
 		XMFLOAT3 pointToVPL = XMFloat3Sub( m_VPLVec[ i ].getPosition(), intersectionPoint );
+		// Get the normal of hitpoint
+		XMFLOAT3 hitPointSurfaceNormal = intersectionNormal;
 
 		// Evaluate BRDF
 		XMVECTOR pointToVPLVec = XMLoadFloat3( &pointToVPL );
@@ -122,7 +125,8 @@ XMFLOAT4 InstantRadiosity::GetRadiance( const XMFLOAT3& intersectionPoint, const
 		float diffuse = dotResultFloat3.x;
 
 		// Check whether any object obscured the light to this hitpoint
-		scene->intersectScene( Ray( intersectionPoint, pointToVPL ), t );
+        XMFLOAT3 normal;
+		scene->intersectScene( Ray( intersectionPoint, pointToVPL ), normal, t );
 		XMFLOAT3 testRayHitPoint( intersectionPoint.x * t, intersectionPoint.y * t, intersectionPoint.z * t );
 
 		float dis1 = math_length( pointToVPL );
@@ -131,7 +135,7 @@ XMFLOAT4 InstantRadiosity::GetRadiance( const XMFLOAT3& intersectionPoint, const
 		// Accumulate light contribution if the virtual point light's radiance can reach this point
 		if( fabs( dis1 - dis2 ) < 0.001f )
 		{
-			XMFLOAT4 plColor = m_VPLVec[ i ].color;
+			XMFLOAT4 plColor = m_VPLVec[ i ].power;
 			float factor = 1.0f / m_VPLVec.size() * diffuse;
 			plColor.x *= factor;
 			plColor.y *= factor;

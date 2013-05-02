@@ -75,7 +75,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             XMLElement* elementInfo = sceneElement->FirstChildElement();
             
             XMFLOAT3 translate(0.f, 0.f, 0.f);
-            XMFLOAT3 color(1.f, 1.f, 1.f);
+            XMFLOAT4 color(1.f, 1.f, 1.f, 1.f);
 
             while(elementInfo != NULL) {
                 std::string info = elementInfo->Name();
@@ -97,6 +97,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             //create pointlight
             PointLight* pointLight = new PointLight();
             pointLight->setPosition(translate);
+            pointLight->power = color;
        
             //add pointlight to scene
             scene->addLight(pointLight);
@@ -108,7 +109,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             float height = sceneElement->FloatAttribute("height");
 
             XMFLOAT3 translate(0.f, 0.f, 0.f);
-            XMFLOAT3 color(1.f, 1.f, 1.f);
+            XMFLOAT4 color(1.f, 1.f, 1.f, 1.f);
             XMFLOAT3 target = translate;
             XMFLOAT3 rotateAxis(0.f, 0.f, 1.f);
             XMFLOAT3 scale(1.f, 1.f, 1.f);
@@ -152,6 +153,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             areaLight->setPosition(translate);
             areaLight->setRotation(rotateAxis, rotateDegrees);
             areaLight->setScale(scale);
+            areaLight->power = color;
 
             XMVECTOR pos = XMLoadFloat3(&translate);
             XMVECTOR tar = XMLoadFloat3(&target);

@@ -2,13 +2,14 @@
 #define _shaderInfo_h_
 
 #include <d3d11.h>
+#include <D3DX11.h>
 #include <D3Dcompiler.h>
 #include <string>
 #include <vector>
 
 
 #pragma comment(lib, "d3dcompiler.lib")
-//#pragma comment(lib, "d3dx11.lib")
+#pragma comment(lib, "d3dx11.lib")
 #pragma comment(lib, "dxguid.lib")
 
 typedef std::vector<D3D11_SIGNATURE_PARAMETER_DESC> ParamList;

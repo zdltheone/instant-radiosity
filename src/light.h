@@ -13,12 +13,14 @@ public:
         AreaLight
     };
 public:
-    Light(LightType type) {};
+    Light(LightType type) : _type(type) {};
     virtual ~Light() {};
 
-    LightType getType() const;
-
-    XMFLOAT4 emission;
+    LightType getType() const {
+        return _type;
+    };
+   
+    XMFLOAT4 power;
 private:
     LightType _type;
 };
@@ -30,13 +32,14 @@ private:
 struct PointLight : public Light
 {
 	XMFLOAT3 direction;
-	XMFLOAT4 color;
+	
 
     PointLight() : Light(LightType::PointLight) {};
 
 	PointLight(const XMFLOAT3& pos, const XMFLOAT3& dir, const XMFLOAT4& power ) 
-		: Light(LightType::PointLight), direction( dir ), color( power )
+		: Light(LightType::PointLight), direction( dir )
 	{
+        this->power = power;
         setPosition(pos);
 	}
 };
@@ -45,14 +48,14 @@ struct PointLight : public Light
 struct AreaLight : public Light
 {
 	XMFLOAT3 direction;
-	XMFLOAT4 color;
 	double   width;
 	double   height;
 
     AreaLight() : Light(LightType::AreaLight) {};
 	AreaLight( const XMFLOAT3& dir, const XMFLOAT4& power, double& w, double& h ) 
-		: Light(LightType::AreaLight), direction( dir ), color( power ), width( w ), height( h)
+		: Light(LightType::AreaLight), direction( dir ), width( w ), height( h)
 	{
+         this->power = power;
 	}
 };
 

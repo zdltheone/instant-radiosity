@@ -23,7 +23,7 @@ public:
 	void SetSampleNum( unsigned int number );
 	unsigned int GetSampleNum();
 	void EmitVPLs( double average_reflectivity, Scene* scene );
-	XMFLOAT4 GetRadiance( const XMFLOAT3& intersectionPoint, const XMFLOAT3& normal, const Scene* scene );
+	XMFLOAT4 GetRadiance( XMFLOAT3 intersectionPoint, XMFLOAT3 intersectionNormal, Scene* scene );
 
 private:
 	RandomNumberGenerator m_rngGenerator;

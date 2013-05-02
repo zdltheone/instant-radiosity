@@ -10,7 +10,7 @@ XMFLOAT3 SolidGeometryPrimitive::GetCenter()
 	return m_center;
 }
 
-bool SolidGeometryPrimitive::intersect(const Ray& ray, float& tOut) const {
+bool SolidGeometryPrimitive::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     return false;
 }
 
@@ -41,7 +41,7 @@ XMFLOAT3 Sphere::getNormal(const XMFLOAT3& point) const {
     return normal;
 }
 
-bool Sphere::intersect(const Ray& ray, float& tOut) const {
+bool Sphere::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     double A, B, C;
 
 	XMFLOAT3 t_pos = ray.position;
@@ -70,6 +70,8 @@ bool Sphere::intersect(const Ray& ray, float& tOut) const {
 		tOut = ( -B + sqrt( delta ) ) / 2.0f;
 	}
 
+    normalOut = getNormal(ray.getPointAlongRay(tOut));
+
 	return true;
 }
 
@@ -86,28 +88,9 @@ double Cube::GetEdgeLen()
 	return m_edgeLen;
 }
 
-XMFLOAT3 Cube::getNormal(const XMFLOAT3& point) const {
-    double edgeLen = m_edgeLen;
-    double box_min[ 3 ] = { -edgeLen / 2.0, -edgeLen / 2.0f, -edgeLen / 2.0f };
-	double box_max[ 3 ] = { edgeLen / 2.0, edgeLen / 2.0f, edgeLen / 2.0f };
 
-    if(abs(point.x - box_min[0]) < 0.1) 
-          return XMFLOAT3(-1.f, 0.f, 0.f);
-    else if(abs(point.x - box_max[0]) < 0.1) 
-           return XMFLOAT3(1.f, 0.f, 0.f);
-    else if(abs(point.y - box_min[1]) < 0.1) 
-           return XMFLOAT3(0.f, -1.f, 0.f);
-    else if(abs(point.y - box_max[1]) < 0.1) 
-          return XMFLOAT3(0.f, 1.f, 0.f);
-    else if(abs(point.z - box_min[2]) < 0.1) 
-          return XMFLOAT3(0.f, 0.f, -1.f);
-    else if(abs(point.z - box_max[2]) < 0.1) 
-          return XMFLOAT3(0.f, 0.f, 1.f);
-    else 
-        return XMFLOAT3(0.f, 0.f, 0.f);
-}
 
-bool Cube::intersect(const Ray& ray, float& tOut) const {
+bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
 
@@ -151,7 +134,7 @@ bool Cube::intersect(const Ray& ray, float& tOut) const {
 	tOut = T_near;
 
     //move this to a different function if we need it
-    /*
+    
 	XMVECTOR t_vDir = XMLoadFloat3( &XMFLOAT3( t_dir.x * -1, t_dir.y * -1, t_dir.z * -1 ) );
 	XMFLOAT3 result;
 	switch( sideRecorder )
@@ -162,11 +145,11 @@ bool Cube::intersect(const Ray& ray, float& tOut) const {
 			XMStoreFloat3( &result, XMVector3Dot( t_vDir, XMLoadFloat3( &XMFLOAT3( 1.0f, 0.0f, 0.0f ) ) ) );
 			if( result.x > 0 )
 			{
-				normal = XMFLOAT3( 1.0f, 0.0f, 0.0f );
+				normalOut = XMFLOAT3( 1.0f, 0.0f, 0.0f );
 			}
 			else
 			{
-				normal = XMFLOAT3( -1.0f, 0.0f, 0.0f );
+				normalOut = XMFLOAT3( -1.0f, 0.0f, 0.0f );
 			}
 			break;
 		}
@@ -175,11 +158,11 @@ bool Cube::intersect(const Ray& ray, float& tOut) const {
 			XMStoreFloat3( &result, XMVector3Dot( t_vDir, XMLoadFloat3( &XMFLOAT3( 0.0f, 1.0f, 0.0f ) ) ) );
 			if( result.x > 0 )
 			{
-				normal = XMFLOAT3( 0.0f, 1.0f, 0.0f );
+				normalOut = XMFLOAT3( 0.0f, 1.0f, 0.0f );
 			}
 			else
 			{
-				normal = XMFLOAT3( 0.0f, -1.0f, 0.0f );
+				normalOut = XMFLOAT3( 0.0f, -1.0f, 0.0f );
 			}
 			break;
 		}
@@ -188,21 +171,21 @@ bool Cube::intersect(const Ray& ray, float& tOut) const {
 			XMStoreFloat3( &result, XMVector3Dot( t_vDir, XMLoadFloat3( &XMFLOAT3( 0.0f, 0.0f, 1.0f ) ) ) );
 			if( result.x > 0 )
 			{
-				normal = XMFLOAT3( 0.0f, 0.0f, 1.0f );
+				normalOut = XMFLOAT3( 0.0f, 0.0f, 1.0f );
 			}
 			else
 			{
-				normal = XMFLOAT3( 0.0f, 0.0f, -1.0f );
+				normalOut = XMFLOAT3( 0.0f, 0.0f, -1.0f );
 			}
 			break;
 		}
 	}
-    */
+    
 	return true;
 }
 
 
-bool GeometryPrimitive::intersect(const Ray& ray, float& tOut) const {
+bool GeometryPrimitive::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     return false;
 }
 
@@ -219,6 +202,7 @@ double Square::GetEdgeLen()
 	return m_edgeLen;
 }
 
+<<<<<<< HEAD
 bool Square::intersect( const Ray& ray, float& tOut ) const 
 {
 	XMFLOAT3 t_pos = ray.position;
@@ -244,4 +228,45 @@ bool Square::intersect( const Ray& ray, float& tOut ) const
 	tOut = t;
 
     return true;
+=======
+bool Square::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
+    //Squares are in the xz-plane in local coords
+	XMFLOAT3 ro_l, ro_v, intersection;
+	XMFLOAT3 rd_l, rd_v;
+	double t;
+   
+    XMVECTOR dirLocal, posLocal;
+    XMVECTOR rayD = XMLoadFloat3(&ray.direction);
+    XMVECTOR rayO = XMLoadFloat3(&ray.position);
+    XMMATRIX world = XMLoadFloat4x4(&this->getTransformation());
+    XMMATRIX inverse = XMMatrixInverse(&XMMatrixDeterminant(world), world);
+
+	//Transform ray into local space
+    
+	dirLocal = XMVector3Transform(rayD, inverse);
+    posLocal = XMVector3Transform(rayO, inverse);
+
+    XMStoreFloat3(&ro_l, posLocal);
+    XMStoreFloat3(&rd_l, dirLocal);
+
+	//Calculate ray intersection -- xz plane so A=0 B=1 C=0 D=0
+	t = -1 * (ro_l.y / rd_l.y);
+
+	//Zero or Negative t values are no good
+	if((t <= 0.0 + EPSILON && t >= 0.0 - EPSILON) || t <= 0.0 + EPSILON) return false;
+
+	//Calculate intersection point(in local space)
+    Ray localRay(ro_l, rd_l);
+    intersection = localRay.getPointAlongRay(t);
+
+	//check for ray intersection along x and z coords
+	if(intersection.x >= -m_edgeLen / 2.0 && intersection.x <= m_edgeLen / 2.0 &&
+		intersection.z >= -m_edgeLen / 2.0 && intersection.z <= m_edgeLen / 2.0) {
+		tOut = t;
+		return true;
+	}
+	else {
+		return false; 
+	}
+>>>>>>> c3fcd731d6d0e7b31e4923f1fe8b7d3dca98e0de
 }

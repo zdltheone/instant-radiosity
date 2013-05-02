@@ -7,13 +7,10 @@
 
 class Primitive : public Transformable {
 public:
-    virtual bool intersect(const Ray& ray, float& tOut) const {
+    virtual bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
         return false;
     };
-    virtual XMFLOAT3 getNormal(const XMFLOAT3& point) const {
-        return XMFLOAT3();
-    };
-
+   
     XMFLOAT3 color;
 };
 

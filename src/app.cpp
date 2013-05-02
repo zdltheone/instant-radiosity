@@ -123,6 +123,7 @@ void App::Run()
 	//return;
     _raytracer->raytrace(scene, imageBuffer);
 
+    std::vector<const Light*> l = scene->getLights(Light::AreaLight);
 
     ID3D11Texture2D* imageTex;
     ID3D11ShaderResourceView* imageSRV;
