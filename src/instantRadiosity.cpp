@@ -35,19 +35,22 @@ unsigned int InstantRadiosity::GetSampleNum()
 	return m_sampleNum;
 }
 
-void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
+void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene )
 {
-	AreaLight areaLight;
-	areaLight.direction = XMFLOAT3( 0.0f, -1.0f, 0.0f );
-	areaLight.power = XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f );
-	areaLight.width = 100;
-	areaLight.height = 100;
+	vector<const Light*> lightVec = ( scene->getLights( Light::AreaLight ) );
+	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
+
+	//AreaLight areaLight = scene->getLights( Light::AreaLight )[ 0 ];
+
 	double    lightAttenuationFactor = 0.8;
 	for( int i = 0; i < m_sampleNum; i++ )
 	{
 		// Sample light position at the start point
 		double pos_x = m_rngGenerator.PhiBDirected( 2, i );
 		double pos_z = m_rngGenerator.PhiBDirected( 3, i );
+
+		pos_x *= areaLight->width;
+		pos_z *= areaLight->height;
 
 		//cout << pos_x * areaLight.width << " " << pos_z * areaLight.height << endl;
 

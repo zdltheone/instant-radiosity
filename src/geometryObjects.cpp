@@ -215,7 +215,9 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
     if(t_dir.y == 0.f) {
         return false;
     }
-	double t = ( -1.0f * t_pos.y ) / t_dir.y;
+	
+	double t = -( t_pos.y ) / ( t_dir.y );
+
     if(t < 0 ) {
         return false;
     }
