@@ -40,25 +40,20 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 	vector<const Light*> lightVec = ( scene->getLights( Light::AreaLight ) );
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
 
-	//AreaLight areaLight = scene->getLights( Light::AreaLight )[ 0 ];
-
 	double    lightAttenuationFactor = 0.8;
-	for( int i = 0; i < m_sampleNum; i++ )
+	for( int i = 1; i <= m_sampleNum; i++ )
 	{
 		// Sample light position at the start point
-		double pos_x = m_rngGenerator.PhiBDirected( 2, i );
-		double pos_z = m_rngGenerator.PhiBDirected( 3, i );
+		double pos_x = m_rngGenerator.PhiBDirected( 2, i ) - 0.5f;
+		double pos_z = m_rngGenerator.PhiBDirected( 3, i ) - 0.5f;
 
 		pos_x *= areaLight->width;
 		pos_z *= areaLight->height;
 
-		//cout << pos_x * areaLight.width << " " << pos_z * areaLight.height << endl;
-
-		//XMFLOAT4 rad = areaLight.color * ;
 		// Suppose the radiance is equal everywhere on the rectangle area light source
 		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
 
-		XMFLOAT3 lightStartPoint( pos_x, 5.0f, pos_z );
+		XMFLOAT3 lightStartPoint( pos_x, -15.0f, pos_z );
 
 		for( int reflectionIter = 0; reflectionIter < m_reflectionNum; reflectionIter++ )
 		{
@@ -66,15 +61,27 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			double pdf_refl = pow( average_reflectivity, reflectionIter );
 
 			// Store virtual point light, the second parameter is not use yet.
-			m_VPLVec.push_back( PointLight( lightStartPoint, XMFLOAT3( 0.0f, -1.0f, 0.0f ), XMFLOAT4( rad.x * lightAttenuationFactor, rad.y * lightAttenuationFactor, rad.z * lightAttenuationFactor, rad.w * lightAttenuationFactor ) ) );
+			//m_VPLVec.push_back( PointLight( lightStartPoint, XMFLOAT3( 0.0f, 1.0f, 0.0f ), XMFLOAT4( rad.x * lightAttenuationFactor, rad.y * lightAttenuationFactor, rad.z * lightAttenuationFactor, rad.w * lightAttenuationFactor ) ) );
+			m_VPLVec.push_back( PointLight( lightStartPoint, XMFLOAT3( 0.0f, 1.0f, 0.0f ), XMFLOAT4( rad.x, rad.y, rad.z, rad.w  ) ) );
 
 			// Sample direction, use sphere polar coordinates
-			double phi = asin( m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 2 ), i ) );
+			double phi = asin( sqrt( m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 2 ), i ) ) );
 			double theta = 2 * acos( -1 ) * m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 3 ), i );
-			
+
 			XMFLOAT3 pointAtSampleSphere( sin( phi ) * cos( theta ), sin( phi ) * sin( theta ), cos( phi ) );
+			// Translate this point to sphere's location
+			XMVECTOR translatedVec = XMLoadFloat3( &pointAtSampleSphere );
+			XMMATRIX transMatrix = XMMatrixTranslation( lightStartPoint.x, lightStartPoint.y, lightStartPoint.z );
+			translatedVec = XMVector3Transform( translatedVec, transMatrix );
+			XMStoreFloat3( &pointAtSampleSphere, translatedVec );
+			
+			cout << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
+
 			// Calculate the reflection direction
 			XMFLOAT3 lightDirection( pointAtSampleSphere.x - lightStartPoint.x, pointAtSampleSphere.y - lightStartPoint.y, pointAtSampleSphere.z - lightStartPoint.z );
+
+			//cout << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
+			cout << "Radius is " << pow( lightDirection.x, 2 ) + pow( lightDirection.y, 2 ) + pow( lightDirection.z, 2 ) << endl;
 
 			// The original equation is rad *= Kd(x) / pi. I assume that Kd(x) is a constant for every single triangle's material
 			rad.x *= 0.5 / acos( -1 );
@@ -94,14 +101,14 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 				break;
 			}
 
-			cout << t << endl;
-
 			// Ray hit nothing so we terminate this path
 			if( t < 0 )
 			{
 				break;
 			}
 
+
+			cout << t << endl;
 			// Calculate the hit point;
 			lightStartPoint.x *= t;
 			lightStartPoint.y *= t;
@@ -112,7 +119,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 	}
 }
 
-XMFLOAT4 InstantRadiosity::GetRadiance( XMFLOAT3 intersectionPoint, XMFLOAT3 intersectionNormal, Scene* scene )
+XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const  Scene* scene )
 {
 	XMFLOAT4 accumulateContribution;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
@@ -154,5 +161,5 @@ XMFLOAT4 InstantRadiosity::GetRadiance( XMFLOAT3 intersectionPoint, XMFLOAT3 int
 		}
  	}
 
-	return accumulateContribution;
+	return XMFLOAT3( accumulateContribution.x, accumulateContribution.y, accumulateContribution.z );
 }
