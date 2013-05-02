@@ -56,6 +56,7 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
         return XMFLOAT3(0.f, 0.f, 0.f);
     }
 
+
     XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
     XMFLOAT3 color = primitive->color;
 
@@ -63,7 +64,7 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
         return XMFLOAT3(); //fix this 
     }
 
-  //  XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, scene)) * XMLoadFloat3(&color);
+    XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, scene)) * XMLoadFloat3(&color);
    
 
 
