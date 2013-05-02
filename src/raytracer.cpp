@@ -43,15 +43,18 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
 
 XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     float t = 0.f;
+    XMFLOAT3 normal;
 
-    const Primitive* primitive = _scene->intersectScene(ray, t);
+    const Primitive* primitive = _scene->intersectScene(ray, normal, t);
     if(primitive == NULL) {
         return XMFLOAT3(0.f, 0.f, 0.f);
     }
 
     XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
-    XMFLOAT3 normal = primitive->getNormal(intersectPoint);
     XMFLOAT3 color = primitive->color;
+
+
+
 
     //quick lighting for testing intersections
     XMFLOAT3 L(1,-1,-1);
@@ -74,8 +77,9 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
 
 void RayTracer::traceRayOnce( const Ray& ray, double& t )
 {
+    XMFLOAT3 normal;
 	float tmpT = -INF;
-	const Primitive* primitive = _scene->intersectScene( ray, tmpT );
+	const Primitive* primitive = _scene->intersectScene( ray, normal, tmpT );
 	if( primitive == NULL )
 	{
 		t = -INF;

@@ -18,7 +18,7 @@ public:
 	void SetCenter( XMFLOAT3 center );
 	XMFLOAT3 GetCenter();
 
-    virtual bool intersect(const Ray& ray, float& tOut) const;
+    virtual bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
 
 private:
 	double m_surfaceArea;
@@ -37,7 +37,7 @@ public:
 	double GetRadius();
 
     XMFLOAT3 getNormal(const XMFLOAT3& point) const;
-    bool intersect(const Ray& ray, float& tOut) const;
+    bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
 	
 private:
 	double m_radius;
@@ -52,9 +52,9 @@ public:
 
 	void SetEdgeLen( double length );
 	double GetEdgeLen();
-
+    
     XMFLOAT3 getNormal(const XMFLOAT3& point) const;
-    bool intersect(const Ray& ray, float& tOut) const;
+    bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
 
 private:
 	double m_edgeLen;
@@ -69,7 +69,7 @@ public:
 	GeometryPrimitive( const GeometryPrimitive& otherInstance ) : m_area( 0.0f ){};
 	~GeometryPrimitive(){};
 
-    virtual bool intersect(const Ray& ray, float& tOut) const;
+    virtual bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
 
 private:
 	double m_area;
@@ -85,7 +85,7 @@ public:
 	void SetEdgeLen( double length );
 	double GetEdgeLen();
 
-    bool intersect(const Ray& ray, float& tOut) const;
+    bool intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
 
 private:
 	double m_edgeLen;
