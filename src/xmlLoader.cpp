@@ -25,7 +25,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
             float width = 800.f;
             float height = 600.f;
             XMFLOAT3 up(0.f, 1.f, 0.f);
-            XMFLOAT3 lookAt(0.f, 0.f, 10.f);
+            XMFLOAT3 lookAt(0.f, 0.f, -10.f);
             XMFLOAT3 translate(0.f, 0.f, 0.f);
             XMFLOAT3 rotateAxis(0.f, 0.f, 1.f);
             float rotateDegrees = 0.f;

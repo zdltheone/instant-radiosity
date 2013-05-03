@@ -15,9 +15,9 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
     const Camera* camera = scene->getCamera();
     assert(camera);
 
-    XMFLOAT3 cameraOrigin;
-    XMStoreFloat3(&cameraOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
-        XMLoadFloat4x4(&camera->getView())));
+    XMFLOAT3 cameraOrigin = XMFLOAT3(0.f, 0.f, 0.f);
+    //XMStoreFloat3(&cameraOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
+    //    XMLoadFloat4x4(&camera->getView())));
 
     float right  = camera->getNearClip() * tan(toRadians(camera->getXFoV() / 2.f)); 
     float left   = -1.f * right;
@@ -55,8 +55,6 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     if(primitive == NULL) {
         return XMFLOAT3(0.f, 0.f, 0.f);
     }
-
-
     XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
     XMFLOAT3 color = primitive->color;
 
@@ -64,11 +62,16 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
         return XMFLOAT3(); //fix this 
     }
 
-    XMLoadFloat3(&_instantRadiosity->GetRadiance(intersectPoint, normal, _scene)) * XMLoadFloat3(&color);
-   
 
-	_instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
+    /*XMFLOAT3 L(1,-1,-1);
+    math_normalize(L);
+    XMFLOAT3 contrib;
+ 
+    XMStoreFloat3(&contrib, XMVector3Dot(XMLoadFloat3(&normal), XMLoadFloat3(&L)) *  XMLoadFloat3(&color) + XMLoadFloat3(&XMFLOAT3(0.1f, 0.1f, 0.1f)) * XMLoadFloat3(&color));
+    return contrib;*/
 
+	XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
+    XMStoreFloat3(&color, XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
     return color;
     //check if object is diffuse or specular
     // if diffuse -> accumulate radiance from vpls and light sources

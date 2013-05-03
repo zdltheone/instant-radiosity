@@ -72,19 +72,31 @@
     <target x="0" y="0" z="0"/>
   </areaLight>
 
-  <!-- Ceiling -->
-  <square edgelen="100">
+  <!-- Ceiling 
+  <square edgelen="5">
     <color r="1" g="1" b="1"/>
-    <scale x="1" y="1" z="1" />
-    <translate x="0" y="10" z="10"/>
-  </square>
+    <rotate axisX="0" axisY="1" axisZ="0" degrees="45"/>
+    <translate x="0" y="10" z="30"/>
+  </square>-->
 
   <sphere radius="4">
-    <translate x="0" y="0" z="10"/>
+    <translate x="1" y="2" z="20"/>
     <color r="0.66" g="0.25" b="0"/>
   </sphere>
+  <sphere radius="4">
+    <translate x="-10" y="-10" z="25"/>
+    <color r="0.66" g="0.0" b="0"/>
+  </sphere>
+  <sphere radius="4">
+    <translate x="5" y="-5" z="15"/>
+    <color r="0.66" g="0.95" b="0"/>
+  </sphere>
+  <sphere radius="4">
+    <translate x="7" y="10" z="30"/>
+    <color r="0.66" g="0.25" b="1"/>
+  </sphere>
 
- 
+
 
 
 </scene>

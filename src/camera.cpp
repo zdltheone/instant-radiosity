@@ -51,7 +51,9 @@ void Camera::updateView() {
     XMVECTOR pos = XMLoadFloat3(&_position);
     XMVECTOR tar = XMLoadFloat3(&_target);
     XMVECTOR up  = XMLoadFloat3(&_up);
-    XMStoreFloat4x4(&_view, XMMatrixLookAtRH(pos, tar, up));
+
+    XMMATRIX mat = XMMatrixLookAtRH(pos, tar, up);
+    XMStoreFloat4x4(&_view, mat);
 }
 
 void Camera::updateProjection(float width, float height) {
