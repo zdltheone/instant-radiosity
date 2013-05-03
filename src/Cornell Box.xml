@@ -77,7 +77,12 @@
     <color r="1" g="1" b="1"/>
     <rotate axisX="0" axisY="1" axisZ="0" degrees="45"/>
     <translate x="0" y="10" z="30"/>
-  </square>-->
+  </square> -->
+
+  <square edgelen="500">
+    <color r="1" g="0" b="0"/>
+    <translate x="0" y="-20" z="10"/>
+  </square>
 
   <sphere radius="4">
     <translate x="1" y="2" z="20"/>
@@ -91,9 +96,9 @@
     <translate x="5" y="-5" z="15"/>
     <color r="0.66" g="0.95" b="0"/>
   </sphere>
-  <sphere radius="4">
-    <translate x="7" y="10" z="30"/>
-    <color r="0.66" g="0.25" b="1"/>
+  <sphere radius="6">
+    <translate x="2" y="0" z="30"/>
+    <color r="0" g="0" b="1"/>
   </sphere>
 
 
