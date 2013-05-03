@@ -41,3 +41,18 @@ XMFLOAT3 XMFloat3Sub( const XMFLOAT3& point1, const XMFLOAT3& point2 )
 
 	return result;
 }
+
+XMFLOAT3 operator +( const XMFLOAT3& float_one, const XMFLOAT3& float_two )
+{
+	return XMFLOAT3( float_one.x + float_two.x, float_one.y + float_two.y, float_one.z + float_two.z );
+}
+
+XMFLOAT3 operator +( const XMFLOAT3& float_one, const double& eps )
+{
+	return XMFLOAT3( float_one.x + eps, float_one.y + eps, float_one.z + eps );
+}
+
+XMFLOAT3 operator *( const XMFLOAT3& float_one, const double& factor )
+{
+	return XMFLOAT3( float_one.x * factor, float_one.y * factor, float_one.z * factor );
+}
