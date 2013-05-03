@@ -208,9 +208,9 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
 	XMFLOAT3 t_dir = ray.direction;
 
 	XMMATRIX world = XMLoadFloat4x4( &this->getTransformation() );
-	//XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
-	//XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
-	//XMStoreFloat3( &t_dir, XMVector3Normalize(XMVector3Transform( XMLoadFloat3(&t_dir), inverse ) ));
+	XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
+	XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
+	XMStoreFloat3( &t_dir, XMVector3Normalize(XMVector3Transform( XMLoadFloat3(&t_dir), inverse ) ));
 
     if(t_dir.y == 0.f) {
         return false;
