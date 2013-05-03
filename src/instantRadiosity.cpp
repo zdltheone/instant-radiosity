@@ -53,7 +53,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 		// Suppose the radiance is equal everywhere on the rectangle area light source
 		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
 
-		XMFLOAT3 lightStartPoint( pos_x, +15.0f, pos_z );
+		XMFLOAT3 lightStartPoint( pos_x, 25.0f, pos_z );
 
 		for( int reflectionIter = 0; reflectionIter < m_reflectionNum; reflectionIter++ )
 		{
@@ -97,13 +97,13 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			XMStoreFloat3( &lightDirection, tmp );
             
             XMFLOAT3 normal;
-			const Primitive *primitive;
+			const Primitive *primitive = NULL;
 			if( ( primitive = scene->intersectScene( Ray( lightStartPoint, lightDirection ), normal, t ) ) == NULL || t < 0 )
 			{
 				break;
 			}
 
-			/*cout << t << endl;
+			cout << t << endl;
 			if( primitive->getType() == 0 )
 			{
 			cout << "Hit a Sauare!" << endl;
@@ -115,7 +115,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			else
 			{
 			cout << "Hit a Cube!" << endl; 
-			}*/
+			}
 			// Calculate the hit point;
 			lightStartPoint.x *= t;
 			lightStartPoint.y *= t;
@@ -126,7 +126,8 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 
 XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const  Scene* scene )
 {
-	XMFLOAT4 accumulateContribution;
+	XMFLOAT4 accumulateContribution( 0.0f, 0.0f, 0.0f, 0.0f );
+	static unsigned int num = 0;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
 		float t;
@@ -137,6 +138,9 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		// Evaluate BRDF
 		XMVECTOR pointToVPLVec = XMLoadFloat3( &pointToVPL );
 		XMVECTOR hitPointSurfaceNormalVec = XMLoadFloat3( &hitPointSurfaceNormal );
+		pointToVPLVec = XMVector3Normalize( pointToVPLVec );
+		hitPointSurfaceNormalVec = XMVector3Normalize( hitPointSurfaceNormalVec );
+
 		XMVECTOR dotResult = XMVector3Dot( pointToVPLVec, hitPointSurfaceNormalVec );
 		XMFLOAT3 dotResultFloat3;
 		XMStoreFloat3( &dotResultFloat3, dotResult );
@@ -144,14 +148,15 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 
 		// Shoot shadow ray
         XMFLOAT3 normal;
-		if( scene->intersectScene( Ray( intersectionPoint, pointToVPL ), normal, t ) == NULL || fabs( t ) < 0.0001f )
+		const Primitive *primitive = NULL;
+		if( ( primitive = scene->intersectScene( Ray( intersectionPoint, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
 		{
 			continue;
 		}
 
 		XMFLOAT3 testRayHitPoint( intersectionPoint.x * t, intersectionPoint.y * t, intersectionPoint.z * t );
 
-		float dis1 = math_length( pointToVPL );
+		float dis1 = math_distance( intersectionPoint, m_VPLVec[ i ].getPosition() );
 		float dis2 = math_distance( intersectionPoint, testRayHitPoint );
 
 		// Accumulate light contribution if the virtual point light's radiance can reach this point
@@ -167,8 +172,14 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 			accumulateContribution.y += plColor.y;
 			accumulateContribution.z += plColor.z;
 			accumulateContribution.w += plColor.w;
+			num++;
 		}
  	}
 
+	//cout << "The total vpls is " << m_VPLVec.size() << " , and number of vpls that make contribution to this point is " << num << endl;
+	if( num != 0 )
+	{
+		cout << "Hit something" << endl;
+	}
 	return XMFLOAT3( accumulateContribution.x, accumulateContribution.y, accumulateContribution.z );
 }

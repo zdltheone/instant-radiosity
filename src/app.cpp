@@ -112,15 +112,8 @@ void App::Run()
 {
 
     Scene* scene = XMLLoader::parseSceneXML("../src/Cornell Box.xml");
-    Image* imageBuffer = new Image(800, 600);
-	//InstantRadiosity ir;
-	//ir.SetReflectionNum( 10 );
-	//ir.SetSampleNum( 5 );
-	//ir.EmitVPLs( 0.6, scene );
+    Image* imageBuffer = new Image(120, 80);
 
-	//int iiii;
-	//cin >> iiii;
-	//return;
     _raytracer->raytrace(scene, imageBuffer);
 
     std::vector<const Light*> l = scene->getLights(Light::AreaLight);
