@@ -53,7 +53,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 		// Suppose the radiance is equal everywhere on the rectangle area light source
 		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
 
-		XMFLOAT3 lightStartPoint( pos_x, -15.0f, pos_z );
+		XMFLOAT3 lightStartPoint( pos_x, +15.0f, pos_z );
 
 		for( int reflectionIter = 0; reflectionIter < m_reflectionNum; reflectionIter++ )
 		{
@@ -75,20 +75,20 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			translatedVec = XMVector3Transform( translatedVec, transMatrix );
 			XMStoreFloat3( &pointAtSampleSphere, translatedVec );
 			
-			cout << "Light Start Point " << lightStartPoint.x << " " << lightStartPoint.y << " " << lightStartPoint.z << endl;
-			cout << "Point at Sphere Surface " << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
+			//cout << "Light Start Point " << lightStartPoint.x << " " << lightStartPoint.y << " " << lightStartPoint.z << endl;
+			//cout << "Point at Sphere Surface " << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
 
 			// Calculate the reflection direction
 			XMFLOAT3 lightDirection( pointAtSampleSphere.x - lightStartPoint.x, pointAtSampleSphere.y - lightStartPoint.y, pointAtSampleSphere.z - lightStartPoint.z );
 
 			//cout << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
-			cout << "Radius is " << pow( lightDirection.x, 2 ) + pow( lightDirection.y, 2 ) + pow( lightDirection.z, 2 ) << endl;
+			//cout << "Radius is " << pow( lightDirection.x, 2 ) + pow( lightDirection.y, 2 ) + pow( lightDirection.z, 2 ) << endl;
 
 			// The original equation is rad *= Kd(x) / pi. I assume that Kd(x) is a constant for every single triangle's material
-			rad.x *= 0.5 / acos( -1 );
-			rad.y *= 0.5 / acos( -1 );
-			rad.z *= 0.5 / acos( -1 );
-			rad.w *= 0.5 / acos( -1 );
+			rad.x *= lightAttenuationFactor; /*0.5 / acos( -1 );*/
+			rad.y *= lightAttenuationFactor;
+			rad.z *= lightAttenuationFactor;
+			rad.w *= lightAttenuationFactor;
 
 			float t = -1.0f;
 			// Normalized the light direction
@@ -103,7 +103,19 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 				break;
 			}
 
-			cout << t << endl;
+			/*cout << t << endl;
+			if( primitive->getType() == 0 )
+			{
+			cout << "Hit a Sauare!" << endl;
+			}
+			else if( primitive->getType() == 1 )
+			{
+			cout << "Hit a Sphere!" << endl;
+			}
+			else
+			{
+			cout << "Hit a Cube!" << endl; 
+			}*/
 			// Calculate the hit point;
 			lightStartPoint.x *= t;
 			lightStartPoint.y *= t;
