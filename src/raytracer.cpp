@@ -71,23 +71,10 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     //return contrib;
 
 	XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
-    XMStoreFloat3(&color, XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
+    XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1000, 1000, 1000)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
     return color;
     //check if object is diffuse or specular
     // if diffuse -> accumulate radiance from vpls and light sources
    
 
  }
-
-void RayTracer::traceRayOnce( const Ray& ray, double& t )
-{
-    XMFLOAT3 normal;
-	float tmpT = -INF;
-	const Primitive* primitive = _scene->intersectScene( ray, normal, tmpT );
-	if( primitive == NULL )
-	{
-		t = -INF;
-	}
-
-	t = tmpT;
-}
