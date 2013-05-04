@@ -92,7 +92,7 @@ void App::Update() {
 
 
 void App::Render() {
-	_direct3D->BeginScene(0.25f);
+	_direct3D->BeginScene(1.f, 1.f, 1.f);
 
     _basic->SetActive();
 
@@ -111,7 +111,7 @@ void App::Render() {
 void App::Run()
 {
 
-    Scene* scene = XMLLoader::parseSceneXML("../src/Cornell Box.xml");
+    Scene* scene = XMLLoader::parseSceneXML("src/Cornell Box.xml");
     Image* imageBuffer = new Image(800, 600);
 	//InstantRadiosity ir;
 	//ir.SetReflectionNum( 10 );
