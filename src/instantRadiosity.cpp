@@ -42,7 +42,11 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 	vector<const Light*> lightVec = ( scene->getLights( Light::AreaLight ) );
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
 
+	/*
+	* Test code
+	*/
 	static unsigned int count = 0;
+	vector<int> vplNum;
 
 	double    lightAttenuationFactor = 0.8 / acos( -1 );
 	for( int i = 1; i <= m_sampleNum; i++ )
@@ -67,6 +71,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			// Store virtual point light, the second parameter is not use yet.
 			//m_VPLVec.push_back( PointLight( lightStartPoint, XMFLOAT3( 0.0f, 1.0f, 0.0f ), XMFLOAT4( rad.x * lightAttenuationFactor, rad.y * lightAttenuationFactor, rad.z * lightAttenuationFactor, rad.w * lightAttenuationFactor ) ) );
 			m_VPLVec.push_back( PointLight( lightStartPoint, XMFLOAT3( 0.0f, 1.0f, 0.0f ), XMFLOAT4( rad.x * now_flux, rad.y * now_flux, rad.z * now_flux, rad.w * now_flux  ) ) );
+			vplNum.push_back( count++ );
 
 			// Sample direction, use sphere polar coordinates
 			double phi = asin( sqrt( m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 2 ), i ) ) );
@@ -81,9 +86,6 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			
 			// Calculate the reflection direction
 			XMFLOAT3 lightDirection( pointAtSampleSphere.x - lightStartPoint.x, pointAtSampleSphere.y - lightStartPoint.y, pointAtSampleSphere.z - lightStartPoint.z );
-
-			//cout << pointAtSampleSphere.x << " " << pointAtSampleSphere.y << " " << pointAtSampleSphere.z << endl;
-			//cout << "Radius is " << pow( lightDirection.x, 2 ) + pow( lightDirection.y, 2 ) + pow( lightDirection.z, 2 ) << endl;
 
 			// The original equation is rad *= Kd(x) / pi. I assume that Kd(x) is a constant for every single triangle's material
 			rad.x *= lightAttenuationFactor; /*0.5 / acos( -1 );*/
@@ -104,22 +106,20 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 				break;
 			}
 
-			//cout << t << endl;
-			//if( primitive->getType() == 0 )
-			//{
-			//	cout << "Hit a Sauare!" << endl;
-			//	count++;
-			//}
-			//else if( primitive->getType() == 1 )
-			//{
-			//	cout << "Hit a Sphere!" << endl;
-			//	count++;
-			//}
-			//else
-			//{
-			//	cout << "Hit a Cube!" << endl; 
-			//	count++;
-			//}
+			cout << "Current t is " << t << endl;
+			XMFLOAT3 testHit = lightStartPoint + lightDirection * t;
+			if( primitive->getType() == 0 )
+			{
+				cout << "VPL " << count << " hits a Sauare! And the coordinates is " << testHit.x << " " << testHit.y << " " << testHit.z << endl;
+			}
+			else if( primitive->getType() == 1 )
+			{
+				cout << "VPL " << count << " hits a Sphere!" << testHit.x << " " << testHit.y << " " << testHit.z << endl;
+			}
+			else
+			{
+				cout << "VPL " << count << " hits a Cube!" << testHit.x << " " << testHit.y << " " << testHit.z << endl;
+			}
 			// Calculate the hit point;
 			lightStartPoint.x += lightDirection.x * t;
 			lightStartPoint.y += lightDirection.y * t;
@@ -164,13 +164,13 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 			continue;
 		}
 
-		XMFLOAT3 testRayHitPoint( intersectionPoint.x * t, intersectionPoint.y * t, intersectionPoint.z * t );
+		XMFLOAT3 testRayHitPoint = intersectionPoint + pointToVPL * t;
 
 		float dis1 = math_distance( intersectionPoint, m_VPLVec[ i ].getPosition() );
 		float dis2 = math_distance( intersectionPoint, testRayHitPoint );
 
 		// Accumulate light contribution if the virtual point light's radiance can reach this point
-		if( fabs( dis1 - dis2 ) < 0.001f )
+		if( fabs( dis1 - dis2 ) < 0.1f )
 		{
 			XMFLOAT4 plColor = m_VPLVec[ i ].power;
 			float factor = 1.0f / m_VPLVec.size() * diffuse;
