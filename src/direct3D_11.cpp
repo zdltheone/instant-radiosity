@@ -52,8 +52,8 @@ void D3D::InitD3D(int screenWidth, int screenHeight, HWND hWnd)
 #endif
 
 	//Create swapchain, device, and device context
-	HR(D3D11CreateDeviceAndSwapChain(0, D3D_DRIVER_TYPE_HARDWARE, 0, createDeviceFlags, &featureLevel, 1, 
-		D3D11_SDK_VERSION, &scd, &m_swapChain, &m_device, NULL, &m_deviceContext));
+    HRESULT hret = D3D11CreateDeviceAndSwapChain(0, D3D_DRIVER_TYPE_HARDWARE, 0, createDeviceFlags, &featureLevel, 1, 
+		D3D11_SDK_VERSION, &scd, &m_swapChain, &m_device, NULL, &m_deviceContext);
 
 	//Set render target, depth/stencil buffer and view
 	D3DResize(screenWidth, screenHeight);
