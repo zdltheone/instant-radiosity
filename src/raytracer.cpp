@@ -15,7 +15,7 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
     const Camera* camera = scene->getCamera();
     assert(camera);
 
-    XMFLOAT3 cameraOrigin = XMFLOAT3(0.f, 0.f, -50.f);
+    XMFLOAT3 cameraOrigin = XMFLOAT3(0, 0, -50);
     //XMStoreFloat3(&cameraOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
     //    XMLoadFloat4x4(&camera->getView())));
 
@@ -33,7 +33,17 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
 
 
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
+         if(row == imageBuffer->getHeight() / 4) {
+                std::cout << "25%\n";
+        }
+        if(row == imageBuffer->getHeight() / 2) {
+            std::cout << "50%\n";
+        }
+        if(row == 3*imageBuffer->getHeight() / 4) {
+            std::cout << "75%\n";
+        }
         for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
+           
             XMFLOAT3 dir(left + col*(dx), 
                          bottom + row*(dy), 
                          camera->getNearClip());
@@ -45,6 +55,7 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
             imageBuffer->setPixel(row, col, XMFLOAT4(color.x, color.y, color.z, 1.f));
         }
     }
+      std::cout << "done\n";
 }
 
 XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {

@@ -64,7 +64,7 @@
   <camera>
     <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
     <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
-    <translate x="0" y="0" z="0"/>
+    <translate x="20" y="20" z="-50"/>
   </camera>
   
   <areaLight width="20" height="20">
@@ -79,14 +79,17 @@
     <translate x="0" y="10" z="30"/>
   </square> -->
 
-  <square edgelen="100">
+  <square edgelen="25">
     <color r="1" g="1" b="1"/>
-    <translate x="0" y="-20" z="10"/>
+    <translate x="0" y="-20" z="20"/>
+    <scale x="1" y="1" z="1"/>
+    <rotate axisX="0" axisY="1" axisZ="0" degrees="-90"/>
   </square>
 
   <square edgelen="10">
     <color r="1" g="1" b="1"/>
     <translate x="0" y="25.002" z="0"/>
+    
   </square>
   
 

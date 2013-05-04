@@ -98,7 +98,7 @@ bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     XMMATRIX world = XMLoadFloat4x4(&this->getTransformation());
     XMMATRIX inverse = XMMatrixInverse(&XMMatrixDeterminant(world), world);
     XMStoreFloat3(&t_pos, XMVector3Transform(XMLoadFloat3(&t_pos), inverse));
-    //XMStoreFloat3(&t_dir, XMVector3Normalize(XMVector3Transform(XMLoadFloat3(&t_dir), inverse)));
+    XMStoreFloat3(&t_dir, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&t_dir), inverse)));
 
 	double edgeLen = m_edgeLen;
 
@@ -212,8 +212,14 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
 	XMMATRIX world = XMLoadFloat4x4( &this->getTransformation() );
     XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
 	XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
-    //for some reason doesnt work when transform direction (wtf?)
 	XMStoreFloat3( &t_dir, XMVector3Normalize(XMVector3TransformNormal( XMLoadFloat3(&t_dir), inverse ) ));
+
+    float edgelen = m_edgeLen;
+    XMFLOAT3 tl(-edgelen, 0.f,  edgelen);
+    XMFLOAT3 br( edgelen, 0.f, -edgelen);
+
+  //  XMStoreFloat3(&tl, XMVector3TransformNormal(XMLoadFloat3(&tl), world));
+  //  XMStoreFloat3(&br, XMVector3TransformNormal(XMLoadFloat3(&br), world));
 
     if(t_dir.y == 0.f) {
         return false;
@@ -226,12 +232,12 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
     }
 
 	XMFLOAT3 intersectionPoint = XMFLOAT3( t_pos.x + t_dir.x * t, t_pos.y + t_dir.y * t, t_pos.z + t_dir.z * t );
-	if( intersectionPoint.x < -m_edgeLen || intersectionPoint.x > m_edgeLen )
+	if( intersectionPoint.x < tl.x || intersectionPoint.x > br.x )
 	{
 		return false;
 	}
 
-	if( intersectionPoint.z < -m_edgeLen || intersectionPoint.z > m_edgeLen )
+	if( intersectionPoint.z < br.z || intersectionPoint.z > tl.z )
 	{
 		return false;
 	}
