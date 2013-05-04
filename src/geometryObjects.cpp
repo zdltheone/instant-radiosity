@@ -225,7 +225,7 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
         return false;
     }
 
-	/*XMFLOAT3 intersectionPoint = XMFLOAT3( t_pos.x + t_dir.x * t, t_pos.y + t_dir.y * t, t_pos.z + t_dir.z * t );
+	XMFLOAT3 intersectionPoint = XMFLOAT3( t_pos.x + t_dir.x * t, t_pos.y + t_dir.y * t, t_pos.z + t_dir.z * t );
 	if( intersectionPoint.x < -m_edgeLen || intersectionPoint.x > m_edgeLen )
 	{
 		return false;
@@ -235,7 +235,7 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
 	{
 		return false;
 	}
-*/
+
 
 	tOut = t;
 
