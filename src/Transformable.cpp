@@ -3,6 +3,9 @@
 Transformable::Transformable() {
     _position = XMFLOAT3(0.f, 0.f, 0.f);
     XMStoreFloat4x4(&_transform, XMMatrixIdentity());
+	XMStoreFloat4x4(&_translation, XMMatrixIdentity());
+	XMStoreFloat4x4(&_rotation, XMMatrixIdentity());
+	XMStoreFloat4x4(&_scale, XMMatrixIdentity());
 }
 
 void Transformable::setPosition(XMFLOAT3 position) {

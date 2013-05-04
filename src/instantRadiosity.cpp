@@ -37,7 +37,7 @@ unsigned int InstantRadiosity::GetSampleNum()
 	return m_sampleNum;
 }
 
-void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene )
+void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 {
 	vector<const Light*> lightVec = ( scene->getLights( Light::AreaLight ) );
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
@@ -46,6 +46,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 	* Test code
 	*/
 	static unsigned int count = 0;
+	static unsigned int count_two = 0;
 	vector<int> vplNum;
 
 	double    lightAttenuationFactor = 0.8 / acos( -1 );
@@ -125,6 +126,16 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			lightStartPoint.y += lightDirection.y * t;
 			lightStartPoint.z += lightDirection.z * t;
 		}
+	}
+
+	for( int i = 0; i < m_VPLVec.size(); i++ )
+	{
+		Sphere* sphere = new Sphere();
+		//cout << m_VPLVec[ i ].getPosition().x << " " << m_VPLVec[ i ].getPosition().y << " " << m_VPLVec[ i ].getPosition().z << endl;
+		sphere->setPosition( m_VPLVec[ i ].getPosition() );
+		sphere->SetRadius( 1.0f );
+		sphere->color = XMFLOAT3( 1.0f, 0.0f, 0.0f );
+		scene->addPrimitive( sphere );
 	}
 }
 

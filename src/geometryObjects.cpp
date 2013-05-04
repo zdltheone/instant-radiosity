@@ -236,7 +236,6 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
 		return false;
 	}
 
-
 	tOut = t;
 
     //transform normal from local(xz) to world coordinates
