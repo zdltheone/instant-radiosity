@@ -11,8 +11,6 @@ public:
 
     void raytrace(const Scene* scene, Image* imageBuffer);
 
-	// This function is only use for tracing rays from light sources to virtual point light
-	void traceRayOnce( const Ray&ray, double& t );
 private:
     XMFLOAT3 traceRay(const Ray& ray, unsigned int depth);
 private:

@@ -48,6 +48,7 @@ const Primitive* Scene::intersectScene(const Ray& ray, XMFLOAT3& normalOut, floa
                 //std::cout << "intersection < EPSILON" << std::endl;
                 continue;
             }
+            
             XMFLOAT3 intersection;
             ray.getPointAlongRay(tOut, intersection);
 

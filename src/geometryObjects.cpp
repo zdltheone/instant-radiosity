@@ -47,7 +47,7 @@ bool Sphere::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
 	XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
 
-	// TODO Transform from world coordinate system to sphere's local coordinate system
+	//transform sphere to world coordinates
     XMFLOAT4 worldOrigin;
     XMStoreFloat4(&worldOrigin, XMVector3Transform(XMLoadFloat3(&XMFLOAT3(0.f, 0.f, 0.f)), 
                                 XMLoadFloat4x4(&this->getTransformation())));
@@ -94,8 +94,7 @@ bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
 
-	// TODO Transform from world coordinate system to sphere's local coordinate system
-    
+	//transform ray into local coordinates
     XMMATRIX world = XMLoadFloat4x4(&this->getTransformation());
     XMMATRIX inverse = XMMatrixInverse(&XMMatrixDeterminant(world), world);
     XMStoreFloat3(&t_pos, XMVector3Transform(XMLoadFloat3(&t_pos), inverse));
@@ -132,8 +131,6 @@ bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
 	}
 
 	tOut = T_near;
-
-    //move this to a different function if we need it
     
 	XMVECTOR t_vDir = XMLoadFloat3( &XMFLOAT3( t_dir.x * -1, t_dir.y * -1, t_dir.z * -1 ) );
 	XMFLOAT3 result;
@@ -181,6 +178,10 @@ bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
 		}
 	}
 
+    //transform normal to world coordinates
+    XMVECTOR vec = XMVector3TransformNormal( XMLoadFloat3(&normalOut), world);
+    XMStoreFloat3(&normalOut, XMVector3Normalize(vec));
+
 	return true;
 }
 
@@ -207,9 +208,11 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
 	XMFLOAT3 t_pos = ray.position;
 	XMFLOAT3 t_dir = ray.direction;
 
+    //transform ray into local coordinates
 	XMMATRIX world = XMLoadFloat4x4( &this->getTransformation() );
     XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
 	XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
+    //for some reason doesnt work when transform direction (wtf?)
 	//XMStoreFloat3( &t_dir, XMVector3Normalize(XMVector3Transform( XMLoadFloat3(&t_dir), inverse ) ));
 
     if(t_dir.y == 0.f) {
@@ -238,8 +241,6 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
     //transform normal from local(xz) to world coordinates
     XMVECTOR vec = XMVector3TransformNormal( XMLoadFloat3(&XMFLOAT3(0.f, 1.f, 0.f)), world);
     XMStoreFloat3(&normalOut, XMVector3Normalize(vec));
-
-    //normalOut = XMFLOAT3(0, 1, 0);
 
     return true;
 }
