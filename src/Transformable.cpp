@@ -1,4 +1,5 @@
 #include "Transformable.h"
+#include "math.h"
 
 Transformable::Transformable() {
     _position = XMFLOAT3(0.f, 0.f, 0.f);
@@ -16,7 +17,11 @@ XMFLOAT3 Transformable::getPosition() const {
 }
 
 void Transformable::setRotation(XMFLOAT3 axis, float degrees) {
-    XMMATRIX matrix = XMMatrixRotationAxis(XMLoadFloat3(&axis), degrees);
+    XMMATRIX matrix;
+
+ 
+    matrix = XMMatrixRotationAxis(XMLoadFloat3(&axis), toRadians(degrees));
+   
     XMStoreFloat4x4(&_rotation, matrix);
 }
 
@@ -31,7 +36,7 @@ XMFLOAT4X4 Transformable::getTransformation() const {
     XMMATRIX rotation = XMLoadFloat4x4(&_rotation);
     XMMATRIX scale = XMLoadFloat4x4(&_scale);
 
-    XMStoreFloat4x4(&transform, (translation * rotation * scale));
+    XMStoreFloat4x4(&transform, (scale * rotation * translation));
 
     return transform;
 }

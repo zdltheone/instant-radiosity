@@ -253,7 +253,7 @@ Scene* XMLLoader::parseSceneXML(std::string fpath) {
 
             //create cube
             Cube* cube = new Cube();
-            cube->SetEdgeLen(edgelen);
+            cube->SetEdgeLen(edgelen/2.f);
             cube->setPosition(translate);
             cube->setRotation(rotateAxis, rotateDegrees);
             cube->setScale(scale);

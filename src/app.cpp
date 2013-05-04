@@ -49,10 +49,10 @@ void App::InitApp()
 	_deviceContext->PSSetSamplers(0, 1, &_sampler);
 
     float verts[20] = 
-        { -0.75f,  0.75f, 0.f, 0.f, 0.f,   //tl
-           0.75f,  0.75f, 0.f, 1.f, 0.f,   //tr
-           0.75f, -0.75f, 0.f, 1.f, 1.f,   //br
-          -0.75f, -0.75f, 0.f, 0.f, 1.f }; //bl
+        { -0.9f,  0.9f, 0.f, 0.f, 0.f,   //tl
+           0.9f,  0.9f, 0.f, 1.f, 0.f,   //tr
+           0.9f, -0.9f, 0.f, 1.f, 1.f,   //br
+          -0.9f, -0.9f, 0.f, 0.f, 1.f }; //bl
     unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
 
     D3D11_BUFFER_DESC vbd;
@@ -111,7 +111,7 @@ void App::Render() {
 void App::Run()
 {
 
-    Scene* scene = XMLLoader::parseSceneXML("../src/Cornell Box.xml");
+    Scene* scene = XMLLoader::parseSceneXML("src/Cornell Box.xml");
     Image* imageBuffer = new Image(120, 80);
 
     _raytracer->raytrace(scene, imageBuffer);
