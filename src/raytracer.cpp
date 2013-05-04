@@ -28,7 +28,7 @@ void RayTracer::raytrace(const Scene* scene, Image* imageBuffer) {
 
 
     _instantRadiosity->SetReflectionNum( 5 );
-    _instantRadiosity->SetSampleNum( 100 );
+    _instantRadiosity->SetSampleNum( 50 );
 	_instantRadiosity->EmitVPLs( 0.5f, scene );
 
 

@@ -79,10 +79,16 @@
     <translate x="0" y="10" z="30"/>
   </square> -->
 
+  <!--
   <square edgelen="500">
     <color r="1" g="0" b="0"/>
     <translate x="0" y="-20" z="10"/>
-  </square>
+  </square> -->
+  <sphere radius="50">
+    <translate x="0" y="0" z="20"/>
+    <color r="0.66" g="0.25" b="0"/>
+  </sphere>
+
 
   <square edgelen="20">
     <color r="1" g="0" b="0"/>

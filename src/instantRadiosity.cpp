@@ -1,7 +1,7 @@
 #include "instantRadiosity.h"
 #include "math.h"
 
-const double eps = 0.001f;
+const double eps = 0.05f;
 
 InstantRadiosity::InstantRadiosity()
 {
@@ -41,6 +41,8 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 {
 	vector<const Light*> lightVec = ( scene->getLights( Light::AreaLight ) );
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
+
+	static unsigned int count = 0;
 
 	double    lightAttenuationFactor = 0.8 / acos( -1 );
 	for( int i = 1; i <= m_sampleNum; i++ )
@@ -103,18 +105,21 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, const Scene* scene
 			}
 
 			//cout << t << endl;
-			if( primitive->getType() == 0 )
-			{
-				cout << "Hit a Sauare!" << endl;
-			}
-			else if( primitive->getType() == 1 )
-			{
-				cout << "Hit a Sphere!" << endl;
-			}
-			else
-			{
-				cout << "Hit a Cube!" << endl; 
-			}
+			//if( primitive->getType() == 0 )
+			//{
+			//	cout << "Hit a Sauare!" << endl;
+			//	count++;
+			//}
+			//else if( primitive->getType() == 1 )
+			//{
+			//	cout << "Hit a Sphere!" << endl;
+			//	count++;
+			//}
+			//else
+			//{
+			//	cout << "Hit a Cube!" << endl; 
+			//	count++;
+			//}
 			// Calculate the hit point;
 			lightStartPoint.x += lightDirection.x * t;
 			lightStartPoint.y += lightDirection.y * t;
@@ -138,6 +143,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		XMVECTOR pointToVPLVec = XMLoadFloat3( &pointToVPL );
 		XMVECTOR hitPointSurfaceNormalVec = XMLoadFloat3( &hitPointSurfaceNormal );
 		pointToVPLVec = XMVector3Normalize( pointToVPLVec );
+		XMStoreFloat3( &pointToVPL, pointToVPLVec );
 		hitPointSurfaceNormalVec = XMVector3Normalize( hitPointSurfaceNormalVec );
 
 		XMVECTOR dotResult = XMVector3Dot( pointToVPLVec, hitPointSurfaceNormalVec );
