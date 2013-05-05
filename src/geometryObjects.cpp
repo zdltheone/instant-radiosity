@@ -211,6 +211,8 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
     //transform ray into local coordinates
 	XMMATRIX world = XMLoadFloat4x4( &this->getTransformation() );
     XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
+    XMMATRIX transpose = XMMatrixTranspose(world);
+    XMMATRIX inverseTranspose = XMMatrixInverse( &XMMatrixDeterminant(transpose), transpose );
 	XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
 	XMStoreFloat3( &t_dir, XMVector3Normalize(XMVector3TransformNormal( XMLoadFloat3(&t_dir), inverse ) ));
 
@@ -245,7 +247,7 @@ bool Square::intersect( const Ray& ray, XMFLOAT3& normalOut, float& tOut ) const
 	tOut = t;
 
     //transform normal from local(xz) to world coordinates
-    XMVECTOR vec = XMVector3TransformNormal( XMLoadFloat3(&XMFLOAT3(0.f, 1.f, 0.f)), world);
+    XMVECTOR vec = XMVector3Transform( XMLoadFloat3(&XMFLOAT3(0.f, 1.f, 0.f)), inverseTranspose);
     XMStoreFloat3(&normalOut, XMVector3Normalize(vec));
 
     return true;

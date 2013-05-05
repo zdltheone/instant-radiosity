@@ -64,71 +64,50 @@
   <camera>
     <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
     <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
-    <translate x="0" y="0" z="-50"/>
+    <translate x="0" y="10" z="-50"/>
   </camera>
   
-  <areaLight width="20" height="20">
+  <areaLight width="5" height="5">
     <color r="1" g="1" b="1"/>
     <target x="0" y="0" z="0"/>
     <translate x="0" y="10" z="0"/>
   </areaLight>
 
-  <!-- Ceiling 
-  <square edgelen="5">
-    <color r="1" g="1" b="1"/>
-    <rotate axisX="0" axisY="1" axisZ="0" degrees="45"/>
-    <translate x="0" y="10" z="30"/>
-  </square> -->
+
 
 
  
   <!-- back wall -->
-  <square edgelen="20">
+  <square edgelen="10">
     <color r="1" g="1" b="1"/>
-    <translate x="0" y="-10" z="10"/>
-    <scale x="2" y="1" z="1"/>
+    <translate x="0" y="10" z="10"/>
     <rotate axisX="1" axisY="0" axisZ="0" degrees="-90"/>
   </square>
-  <square edgelen="20">
-    <color r="1" g="0" b="1"/>
-    <translate x="0" y="-10" z="50"/>
-    <scale x="2" y="1" z="1"/>
-    <rotate axisX="1" axisY="0" axisZ="0" degrees="-90"/>
-  </square>
-  
-  
-  
   <!-- floor -->
-  <square edgelen="20">
-    <color r="0.5" g="0.5" b="0.5"/>
-    <translate x="0" y="-25" z="0"/>
-    <scale x="3" y="1" z="1"/>
+  <square edgelen="10">
+    <color r="1.0" g="1.0" b="1.0"/>
+    <translate x="0" y="0" z="0"/>
   </square>
-  <!-- left wall -->
-  <square edgelen="20">
-    <color r="1" g="0" b="0"/>
-    <translate x="-25" y="-10" z="10"/>
-    <scale x="1" y="1" z="2"/>
+  <!-- ceiling -->
+  <square edgelen="10">
+    <color r="1.0" g="1.0" b="1.0"/>
+    <translate x="0" y="20" z="0"/>
+    <rotate axisX="1" axisY="0" axisZ="0" degrees="-180"/>
+  </square>
+  <!-- left wall-->
+  <square edgelen="10">
+    <color r="0" g="0" b="1"/>
+    <translate x="-10" y="10" z="0"/>
     <rotate axisX="0" axisY="0" axisZ="1" degrees="-90"/>
   </square>
-
-  <!-- right wall -->
-  <square edgelen="20">
-    <color r="0" g="0" b="1"/>
-    <translate x="25" y="-10" z="10"/>
-    <scale x="1" y="1" z="1"/>
+  <!-- right wall-->
+  <square edgelen="10">
+    <color r="1" g="0" b="0"/>
+    <translate x="10" y="10" z="0"/>
     <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
-  </square>
-
-
-
-
-
-  <!-- light -->
-  <square edgelen="20">
-    <color r="1" g="1" b="1"/>
-    <translate x="0" y="50.002" z="10"/>
-  </square>
+  </square>  
+  
+ 
 
   <!--
   <sphere radius="4">
