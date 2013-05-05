@@ -56,3 +56,8 @@ XMFLOAT3 operator *( const XMFLOAT3& float_one, const double& factor )
 {
 	return XMFLOAT3( float_one.x * factor, float_one.y * factor, float_one.z * factor );
 }
+
+XMFLOAT4 operator *( const XMFLOAT4& float_one, const double& factor )
+{
+	return XMFLOAT4( float_one.x * factor, float_one.y * factor, float_one.z * factor, float_one.w * factor );
+}
