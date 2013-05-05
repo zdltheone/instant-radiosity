@@ -62,7 +62,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		// Suppose the radiance is equal everywhere on the rectangle area light source
 		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
 
-		XMFLOAT3 lightStartPoint( pos_x, 25.0f, pos_z );
+        XMFLOAT3 lightStartPoint( pos_x, areaLight->getPosition().y, pos_z );
 
 		for( int reflectionIter = 0; reflectionIter < m_reflectionNum; reflectionIter++ )
 		{
@@ -135,7 +135,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		sphere->setPosition( m_VPLVec[ i ].getPosition() );
 		sphere->SetRadius( 1.0f );
 		sphere->color = XMFLOAT3( 1.0f, 0.0f, 0.0f );
-		scene->addPrimitive( sphere );
+		//scene->addPrimitive( sphere );
 	}
 }
 

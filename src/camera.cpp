@@ -69,3 +69,7 @@ XMFLOAT4X4 Camera::getView() const {
 XMFLOAT4X4 Camera::getProjection() const {
     return _proj;
 }
+
+XMFLOAT3 Camera::getTarget() const {
+    return _target;
+}

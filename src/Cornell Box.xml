@@ -64,12 +64,13 @@
   <camera>
     <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
     <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
-    <translate x="20" y="20" z="-50"/>
+    <translate x="0" y="0" z="-50"/>
   </camera>
   
   <areaLight width="20" height="20">
     <color r="1" g="1" b="1"/>
     <target x="0" y="0" z="0"/>
+    <translate x="0" y="10" z="0"/>
   </areaLight>
 
   <!-- Ceiling 
@@ -79,26 +80,63 @@
     <translate x="0" y="10" z="30"/>
   </square> -->
 
-  <square edgelen="25">
-    <color r="1" g="1" b="1"/>
-    <translate x="0" y="-20" z="20"/>
-    <scale x="1" y="1" z="1"/>
-    <rotate axisX="0" axisY="1" axisZ="0" degrees="-90"/>
-  </square>
 
-  <square edgelen="10">
+ 
+  <!-- back wall -->
+  <square edgelen="20">
     <color r="1" g="1" b="1"/>
-    <translate x="0" y="25.002" z="0"/>
-    
+    <translate x="0" y="-10" z="10"/>
+    <scale x="2" y="1" z="1"/>
+    <rotate axisX="1" axisY="0" axisZ="0" degrees="-90"/>
+  </square>
+  <square edgelen="20">
+    <color r="1" g="0" b="1"/>
+    <translate x="0" y="-10" z="50"/>
+    <scale x="2" y="1" z="1"/>
+    <rotate axisX="1" axisY="0" axisZ="0" degrees="-90"/>
   </square>
   
+  
+  
+  <!-- floor -->
+  <square edgelen="20">
+    <color r="0.5" g="0.5" b="0.5"/>
+    <translate x="0" y="-25" z="0"/>
+    <scale x="3" y="1" z="1"/>
+  </square>
+  <!-- left wall -->
+  <square edgelen="20">
+    <color r="1" g="0" b="0"/>
+    <translate x="-25" y="-10" z="10"/>
+    <scale x="1" y="1" z="2"/>
+    <rotate axisX="0" axisY="0" axisZ="1" degrees="-90"/>
+  </square>
 
+  <!-- right wall -->
+  <square edgelen="20">
+    <color r="0" g="0" b="1"/>
+    <translate x="25" y="-10" z="10"/>
+    <scale x="1" y="1" z="1"/>
+    <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
+  </square>
+
+
+
+
+
+  <!-- light -->
+  <square edgelen="20">
+    <color r="1" g="1" b="1"/>
+    <translate x="0" y="50.002" z="10"/>
+  </square>
+
+  <!--
   <sphere radius="4">
     <translate x="1" y="2" z="20"/>
     <color r="0.66" g="0.25" b="0"/>
   </sphere>
 
-  <!--
+
   <sphere radius="4">
     <translate x="-10" y="-10" z="25"/>
     <color r="0.66" g="0.0" b="0"/>

@@ -20,6 +20,7 @@ public:
 
     XMFLOAT4X4 getView() const;
     XMFLOAT4X4 getProjection() const;
+    XMFLOAT3 getTarget() const;
 private:
     void updateView();
     void updateProjection(float width, float height);

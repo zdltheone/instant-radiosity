@@ -26,7 +26,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	Initialize Window's private member variables
 **/
 Window::Window()
-	: m_clientWidth(800), m_clientHeight(600), m_hInstance(0), m_hWnd(0),
+	: m_clientWidth(1600), m_clientHeight(1200), m_hInstance(0), m_hWnd(0),
 	m_maximized(false), m_minimized(false), m_resizing(false)
 {}
 

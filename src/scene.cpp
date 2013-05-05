@@ -56,6 +56,7 @@ const Primitive* Scene::intersectScene(const Ray& ray, XMFLOAT3& normalOut, floa
             assert(distance > EPSILON);
 
             if(distance < minDepth) {
+                minDepth = distance;
                 intersectedPrimitive = primitive;
             }
         }
