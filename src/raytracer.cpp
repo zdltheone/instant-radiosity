@@ -28,9 +28,9 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
     float dy = (top - bottom) / imageBuffer->getHeight();
   
 
-    _instantRadiosity->SetReflectionNum( 3 );
-    _instantRadiosity->SetSampleNum( 50 );
-//	_instantRadiosity->EmitVPLs( 0.5f, scene );
+    _instantRadiosity->SetReflectionNum( 2 );
+    _instantRadiosity->SetSampleNum( 2 );
+	_instantRadiosity->EmitVPLs( 0.5f, scene );
 
 
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
@@ -44,28 +44,7 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
             std::cout << "75%\n";
         }
         for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
-            float u = (float)col / imageBuffer->getWidth();
-            float v = (float)row / imageBuffer->getHeight();
-            XMFLOAT3 d(2*u - 1, 2*v - 1, 0.1f);
-            XMStoreFloat3(&d, XMVector3Normalize(XMLoadFloat3(&d)));
-            XMStoreFloat3(&d, XMVector3Normalize(XMVector3Transform(XMLoadFloat3(&d), XMLoadFloat4x4(&camera->getProjection()))));
-            XMStoreFloat3(&d, XMVector3Normalize(XMVector3Transform(XMLoadFloat3(&d), XMLoadFloat4x4(&camera->getView()))));
-           
-
-
-            XMFLOAT3 rayDir2((2*u - 800)/800 * tan(toRadians(camera->getXFoV() / 2.f)),
-                             (600 - 2*v)/600 * tan(toRadians(camera->getYFoV() / 2.f)),
-                             1.f);
-            XMStoreFloat3(&rayDir2, XMVector3Normalize(XMLoadFloat3(&rayDir2)));
-          //  XMStoreFloat3(&rayDir2, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&rayDir2), XMLoadFloat4x4(&camera->getView()))));
-                              
-
-
-
-
-            XMFLOAT3 rayDir(-800 + col*dx, 600 - row*dx, camera->getNearClip());
-            XMStoreFloat3(&rayDir, XMVector3Normalize(XMVector3Transform(XMLoadFloat3(&rayDir), XMLoadFloat4x4(&camera->getView()))));
-            XMStoreFloat3(&rayDir, XMVector3Normalize(XMVector3Transform(XMLoadFloat3(&rayDir), XMLoadFloat4x4(&camera->getProjection()))));
+          
 
             XMFLOAT3 dir(left + col*(dx), 
                          bottom + row*(dy), 
@@ -84,21 +63,27 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
 
 XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     float t = 0.f;
+    static XMFLOAT3 saveNormal;
     XMFLOAT3 normal;
+    XMFLOAT3 intersectPoint;
 
     const Primitive* primitive = _scene->intersectScene(ray, normal, t);
     if(primitive == NULL) {
         return XMFLOAT3(0.f, 0.f, 0.f);
     }
-    XMFLOAT3 intersectPoint = ray.getPointAlongRay(t);
+    Ray r(XMFLOAT3(0.f, 0.f, 0.f), ray.direction);
+    
+    ray.getPointAlongRay(t, intersectPoint);
     XMFLOAT3 color = primitive->color;
-
+   
     if(depth > _maxDepth) {
         return XMFLOAT3(); //fix this 
     }
 
+    
+
 	//XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
-    //XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1, 1, 1)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
+    //XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(20, 20, 20)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
     return color;
   
  }

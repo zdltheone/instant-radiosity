@@ -23,14 +23,14 @@ struct Ray
     void getPointAlongRay(double t, XMFLOAT3& pointOut) const {
          XMVECTOR originVec = XMLoadFloat3(&position);
          XMVECTOR directionVec = XMLoadFloat3(&direction);
-         XMStoreFloat3(&pointOut, directionVec * t);
+         XMStoreFloat3(&pointOut, originVec + directionVec * t);
     };
 
      XMFLOAT3 getPointAlongRay(double t) const {
          XMFLOAT3 pointOut;
          XMVECTOR originVec = XMLoadFloat3(&position);
          XMVECTOR directionVec = XMLoadFloat3(&direction);
-         XMStoreFloat3(&pointOut, directionVec * t);
+         XMStoreFloat3(&pointOut, originVec + directionVec * t);
 
          return pointOut;
     };
