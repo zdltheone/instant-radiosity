@@ -38,9 +38,6 @@ XMFLOAT3 Sphere::getNormal(const XMFLOAT3& point) const {
     XMFLOAT3 normal;
     XMStoreFloat3(&normal, XMVector3Normalize(vec1 - vec2));
     
-
-
-
     return normal;
 }
 

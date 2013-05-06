@@ -1,0 +1,135 @@
+<!---
+<camera> - create a camera in the scene (can only be one)
+  <perspective near="" far="" xfov="" yfov="" width="" height=""/> - setup persepective matrix of camera
+    -near -> nearClip distance
+    -far  -> farClip distance
+    -xfov -> field of view in degrees in x direction
+    -yfov -> field of view in degrees in y direction
+    -width -> width of view rect   (default 800) 
+    -height -> height of view rect (default 600)
+  <lookat x="" y="" z="" upX="" upY="" upZ=""/> - setup view matrix of camera  this doesnt work right now
+    - x,y,z -> position to look camera at 
+    - upX, upY, upZ -> up direction of camera
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+  
+<pointLight> - create a point light in the scene
+  <translate x="" y="" z=""/> 
+  <color r="" g="" b=""/>
+  
+<areaLight> - create arealight in the scene
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+  <color r="" g="" b=""/> - color or light
+  <target x="" y="" z=""/> - where to point light at --- not used yet
+  <scale x="" y="" z="" /> - scale size of light
+  
+<sphere radius="">
+  <color r="" g="" b=""/> - diffuse color of sphere
+  <scale x="" y="" z="" /> - scale size of sphere
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+
+<cube edgelen="">
+  <color r="" g="" b=""/> - diffuse color of sphere
+  <scale x="" y="" z="" /> - scale size of sphere
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+
+<square edgelen="">
+  <color r="" g="" b=""/> - diffuse color of sphere
+  <scale x="" y="" z="" /> - scale size of sphere
+  <translate x="" y="" z=""/> 
+    - x,y,z -> position to move to
+  <rotate axisX="" axisY="" axisZ="" degree=""/>
+    - axisX,Y,Z -> axis to rotate about
+    - degrees - degrees to rotate about 
+
+-->
+
+
+<scene>
+  <camera>
+    <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
+    <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
+    <translate x="0" y="10" z="-25"/>
+ </camera>
+  
+  <areaLight width="5" height="5">
+    <color r="1" g="1" b="1"/>
+    <target x="0" y="0" z="0"/>
+    <translate x="0" y="19" z="0"/>
+  </areaLight>
+
+ 
+  <!-- back wall -->
+  <square edgelen="10">
+    <color r="0.8" g="0.8" b="0.8"/>
+    <translate x="0" y="10" z="10"/>
+    <rotate axisX="1" axisY="0" axisZ="0" degrees="-90"/>
+  </square>
+  <!-- floor -->
+  <square edgelen="10">
+    <color r="0.9" g="0.9" b="0.9"/>
+    <translate x="0" y="0" z="0"/>
+  </square>
+  <!-- ceiling -->
+  <square edgelen="10">
+    <color r="1.0" g="1.0" b="1.0"/>
+    <translate x="0" y="20" z="0"/>
+    <rotate axisX="1" axisY="0" axisZ="0" degrees="-180"/>
+  </square>
+  <!-- left wall-->
+  <square edgelen="10">
+    <color r="0" g="0" b="1"/>
+    <translate x="-10" y="10" z="0"/>
+    <rotate axisX="0" axisY="0" axisZ="1" degrees="-90"/>
+  </square>
+  <!-- right wall-->
+  <square edgelen="10">
+    <color r="1" g="0" b="0"/>
+    <translate x="10" y="10" z="0"/>
+    <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
+  </square>
+
+
+
+ <!--
+ <sphere radius="4">
+    <translate x="0" y="4" z="5"/>
+    <color r="0.66" g="0.0" b="0"/>
+  </sphere>
+-->
+
+
+
+  <!--
+ 
+
+
+  <sphere radius="4">
+    <translate x="-10" y="-10" z="25"/>
+    <color r="0.66" g="0.0" b="0"/>
+  </sphere>
+  <sphere radius="4">
+    <translate x="5" y="-5" z="15"/>
+    <color r="0.66" g="0.95" b="0"/>
+  </sphere>
+  <sphere radius="6">
+    <translate x="2" y="0" z="30"/>
+    <color r="0" g="0" b="1"/>
+  </sphere> -->
+
+</scene>

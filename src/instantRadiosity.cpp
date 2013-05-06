@@ -43,13 +43,6 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
 	double probability = 1.0f / ( areaLight->width * areaLight->height );
 
-	/*
-	* Test code
-	*/
-	static unsigned int count = 0;
-	static unsigned int count_two = 0;
-	vector<int> vplNum;
-
 	double    lightAttenuationFactor = 0.2 / acos( -1 );
 	for( int i = 1; i <= m_sampleNum; i++ )
 	{
@@ -80,6 +73,8 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			// Sample direction, use sphere polar coordinates
 			double phi = asin( sqrt( m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 2 ), i ) ) );
 			double theta = 2 * acos( -1 ) * m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 3 ), i );
+			
+			//cout << phi * 180.0f / 3.1415926 << " " << theta * 180.0f / 3.1415926 << endl;
 
 			XMFLOAT3 pointAtSampleSphere( sin( phi ) * cos( theta ), sin( phi ) * sin( theta ), cos( phi ) );
 			// Translate this point to sphere's location
@@ -123,6 +118,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			//{
 			//	cout << "VPL " << count << " hits a Cube!" << testHit.x << " " << testHit.y << " " << testHit.z << endl;
 			//}
+
 			// Calculate the hit point;
 			lightStartPoint.x += lightDirection.x * t;
 			lightStartPoint.y += lightDirection.y * t;
@@ -147,13 +143,10 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 	static unsigned int num = 0;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
-		//if( ( intersectionNormal.y + 1.0f ) < 0.0001f )
-		//{
-		//	int a;
-		//	a = 10;
-		//}
-		XMFLOAT3 test = m_VPLVec[ i ].getPosition();
-
+		if( ( intersectionNormal.y + 1.0f ) < 0.001f )
+		{
+			num++;
+		}
 		float t;
 		XMFLOAT3 pointToVPL = XMFloat3Sub( m_VPLVec[ i ].getPosition(), intersectionPoint );
 		// Get the normal of hitpoint
@@ -191,7 +184,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		float dis2 = math_distance( intersectionPoint, testRayHitPoint );
 
 		// Accumulate light contribution if the virtual point light's radiance can reach this point
-		if( ( fabs( dis1 - dis2 ) < 0.01f ) || ( dis2 - dis1 > 1.0f ) )
+		if( ( fabs( dis1 - dis2 ) < 0.01f )  || ( fabs( dis2 - dis1 ) > 0.01f ) )
 		{
 			XMFLOAT4 plColor = m_VPLVec[ i ].power;
 			float factor = 1.0f / m_VPLVec.size() * diffuse;
@@ -210,7 +203,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 	//cout << "The total vpls is " << m_VPLVec.size() << " , and number of vpls that make contribution to this point is " << num << endl;
 	//if( num != 0 )
 	//{
-	//	cout << "Hit something" << endl;
+	//	cout << "Points on floor are " << num  << endl;
 	//}
 	return XMFLOAT3( accumulateContribution.x, accumulateContribution.y, accumulateContribution.z );
 }
