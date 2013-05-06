@@ -65,6 +65,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		//XMFLOAT4 rad( 1.0f / probability, 1.0f / probability, 1.0f / probability, 1.0f / probability );
 
         XMFLOAT3 lightStartPoint( pos_x, areaLight->getPosition().y, pos_z );
+		XMFLOAT3 surfaceNormal( 0.0f, -1.0f, 0.0f );
 
 		for( int reflectionIter = 0; reflectionIter < m_reflectionNum; reflectionIter++ )
 		{
@@ -96,9 +97,8 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			tmp = XMVector3Normalize( tmp );
 			XMStoreFloat3( &lightDirection, tmp );
             
-            XMFLOAT3 normal;
 			const Primitive *primitive = NULL;
-			if( ( primitive = scene->intersectScene( Ray( lightStartPoint + lightDirection * eps, lightDirection ), normal, t ) ) == NULL || t < 0 )
+			if( ( primitive = scene->intersectScene( Ray( lightStartPoint + surfaceNormal * eps, lightDirection ), surfaceNormal, t ) ) == NULL || t < 0 )
 			{
 				break;
 			}
@@ -180,7 +180,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
         XMFLOAT3 normal;
 		const Primitive *primitive = NULL;
 
-		if( ( primitive = scene->intersectScene( Ray( intersectionPoint + pointToVPL * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
+		if( ( primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
 		{
 			continue;
 		}
