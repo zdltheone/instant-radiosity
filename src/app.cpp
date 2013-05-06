@@ -111,8 +111,8 @@ void App::Render() {
 void App::Run()
 {
 
-    Scene* scene = XMLLoader::parseSceneXML("src/Cornell Box.xml");
-    Image* imageBuffer = new Image(800, 600);
+    Scene* scene = XMLLoader::parseSceneXML("../src/Cornell Box.xml");
+    Image* imageBuffer = new Image(640, 480);
 
     _raytracer->raytrace(scene, imageBuffer);
 

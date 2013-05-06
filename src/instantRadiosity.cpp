@@ -1,7 +1,7 @@
 #include "instantRadiosity.h"
 #include "math.h"
 
-const double eps = 0.05f;
+const double eps = 0.005f;
 
 InstantRadiosity::InstantRadiosity()
 {
@@ -61,8 +61,8 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		pos_z *= areaLight->height;
 
 		// Suppose the radiance is equal everywhere on the rectangle area light source
-		//XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
-		XMFLOAT4 rad( 1.0f / probability, 1.0f / probability, 1.0f / probability, 1.0f / probability );
+		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
+		//XMFLOAT4 rad( 1.0f / probability, 1.0f / probability, 1.0f / probability, 1.0f / probability );
 
         XMFLOAT3 lightStartPoint( pos_x, areaLight->getPosition().y, pos_z );
 
@@ -147,6 +147,13 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 	static unsigned int num = 0;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
+		//if( ( intersectionNormal.y + 1.0f ) < 0.0001f )
+		//{
+		//	int a;
+		//	a = 10;
+		//}
+		XMFLOAT3 test = m_VPLVec[ i ].getPosition();
+
 		float t;
 		XMFLOAT3 pointToVPL = XMFloat3Sub( m_VPLVec[ i ].getPosition(), intersectionPoint );
 		// Get the normal of hitpoint
@@ -172,11 +179,6 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		// Shoot shadow ray
         XMFLOAT3 normal;
 		const Primitive *primitive = NULL;
-		if( ( intersectionNormal.y + 1.0f ) < 0.0001f )
-		{
-			int a;
-			a = 10;
-		}
 
 		if( ( primitive = scene->intersectScene( Ray( intersectionPoint + pointToVPL * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
 		{
@@ -189,7 +191,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		float dis2 = math_distance( intersectionPoint, testRayHitPoint );
 
 		// Accumulate light contribution if the virtual point light's radiance can reach this point
-		if( fabs( dis1 - dis2 ) < 0.1f )
+		if( ( fabs( dis1 - dis2 ) < 0.01f ) || ( dis2 - dis1 > 1.0f ) )
 		{
 			XMFLOAT4 plColor = m_VPLVec[ i ].power;
 			float factor = 1.0f / m_VPLVec.size() * diffuse;
