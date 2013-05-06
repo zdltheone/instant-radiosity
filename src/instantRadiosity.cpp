@@ -205,7 +205,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		if( ( fabs( dis1 - dis2 ) < 0.01f )  || ( fabs( dis2 - dis1 ) > 0.01f ) )
 		{
 			XMFLOAT4 plColor = m_VPLVec[ i ].power;
-			float factor = 1.0f / m_VPLVec.size() * diffuse;
+			float factor = ( 1.0f / m_VPLVec.size() ) * diffuse * ( 1.0f / pow( dis1, 2 ) );
 			plColor.x *= factor;
 			plColor.y *= factor;
 			plColor.z *= factor;
