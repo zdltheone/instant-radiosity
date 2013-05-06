@@ -94,6 +94,11 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			
 			// Calculate the reflection direction
 			XMFLOAT3 lightDirection( pointAtSampleSphere.x - lightStartPoint.x, pointAtSampleSphere.y - lightStartPoint.y, pointAtSampleSphere.z - lightStartPoint.z );
+			if( reflectionIter == 0 )
+			{
+				XMMATRIX rotateX = XMMatrixRotationX( 90.0f );
+				XMStoreFloat3( &lightDirection, XMVector3Transform( XMLoadFloat3( &lightDirection ), rotateX ) );
+			}
 
 			float t = -1.0f;
 			// Normalized the light direction

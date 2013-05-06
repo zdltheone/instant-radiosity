@@ -37,7 +37,7 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int ref
     }
     _instantRadiosity->SetReflectionNum( reflect );
     _instantRadiosity->SetSampleNum( samples );
-	_instantRadiosity->EmitVPLs( 0.5f, scene );
+	_instantRadiosity->EmitVPLs( 0.3f, scene );
 
     std::cout << "begin\n";
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
