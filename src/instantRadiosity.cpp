@@ -127,8 +127,6 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			lightStartPoint.x += lightDirection.x * t;
 			lightStartPoint.y += lightDirection.y * t;
 			lightStartPoint.z += lightDirection.z * t;
-
-			//lightStartPoint = lightStartPoint + normal * eps;
 		}
 	}
 
@@ -174,11 +172,11 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		// Shoot shadow ray
         XMFLOAT3 normal;
 		const Primitive *primitive = NULL;
-		//if( normal.y < 0 )
-		//{
-		//	char t;
-		//	cin >> t;
-		//}
+		if( ( intersectionNormal.y + 1.0f ) < 0.0001f )
+		{
+			int a;
+			a = 10;
+		}
 
 		if( ( primitive = scene->intersectScene( Ray( intersectionPoint + pointToVPL * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
 		{

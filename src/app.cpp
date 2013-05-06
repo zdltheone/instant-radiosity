@@ -112,7 +112,7 @@ void App::Run()
 {
 
     Scene* scene = XMLLoader::parseSceneXML("../src/Cornell Box.xml");
-    Image* imageBuffer = new Image(240, 160);
+    Image* imageBuffer = new Image(160, 80);
 
     _raytracer->raytrace(scene, imageBuffer);
 
