@@ -111,12 +111,10 @@ void App::Render() {
 void App::Run()
 {
 
-    Scene* scene = XMLLoader::parseSceneXML("../src/Cornell Box.xml");
-    Image* imageBuffer = new Image(120, 80);
+    Scene* scene = XMLLoader::parseSceneXML("src/Cornell Box.xml");
+    Image* imageBuffer = new Image(800, 600);
 
     _raytracer->raytrace(scene, imageBuffer);
-
-    std::vector<const Light*> l = scene->getLights(Light::AreaLight);
 
     ID3D11Texture2D* imageTex;
     ID3D11ShaderResourceView* imageSRV;

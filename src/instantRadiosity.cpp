@@ -111,7 +111,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			XMFLOAT3 testHit = lightStartPoint + lightDirection * t;
 			if( primitive->getType() == 0 )
 			{
-				cout << "VPL " << count << " hits a Sauare! And the coordinates is " << testHit.x << " " << testHit.y << " " << testHit.z << endl;
+				cout << "VPL( " << reflectionIter << ")" << count << " hits a Square! And the coordinates is " << testHit.x << " " << testHit.y << " " << testHit.z << "(" << normal.x << " " << normal.y << " " << normal.z << endl;
 			}
 			else if( primitive->getType() == 1 )
 			{
@@ -133,14 +133,17 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		Sphere* sphere = new Sphere();
 		//cout << m_VPLVec[ i ].getPosition().x << " " << m_VPLVec[ i ].getPosition().y << " " << m_VPLVec[ i ].getPosition().z << endl;
 		sphere->setPosition( m_VPLVec[ i ].getPosition() );
-		sphere->SetRadius( 1.0f );
-		sphere->color = XMFLOAT3( 1.0f, 0.0f, 0.0f );
-		//scene->addPrimitive( sphere );
+		sphere->SetRadius( 0.25f );
+		sphere->color = XMFLOAT3( 0.0f, 0.5f, 0.0f );
+		scene->addPrimitive( sphere );
 	}
 }
 
 XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const  Scene* scene )
 {
+    if(intersectionNormal.z == -1.f) {
+        float f = 1.f;
+    }
 	XMFLOAT4 accumulateContribution( 0.0f, 0.0f, 0.0f, 0.0f );
 	static unsigned int num = 0;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
