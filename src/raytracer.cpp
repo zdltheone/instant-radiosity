@@ -90,7 +90,10 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     if(_showVPLs == false) {
 	    XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
         XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1, 1, 1)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
-    }
+    } else {
+		XMFLOAT3 fakeLight(-0.25, 0.25, -1);
+		XMStoreFloat3(&color, XMVector3Dot(XMVector3Normalize(XMLoadFloat3(&fakeLight)), XMLoadFloat3(&normal)) * XMLoadFloat3(&color) + XMLoadFloat3(&XMFLOAT3(0.5, 0.5, 0.5)) * XMLoadFloat3(&color));
+	}
 
     return color;
   
