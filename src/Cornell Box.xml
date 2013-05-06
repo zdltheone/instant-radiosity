@@ -7,7 +7,7 @@
     -yfov -> field of view in degrees in y direction
     -width -> width of view rect   (default 800) 
     -height -> height of view rect (default 600)
-  <lookat x="" y="" z="" upX="" upY="" upZ=""/> - setup view matrix of camera ------ this doesnt work right now
+  <lookat x="" y="" z="" upX="" upY="" upZ=""/> - setup view matrix of camera  this doesnt work right now
     - x,y,z -> position to look camera at 
     - upX, upY, upZ -> up direction of camera
   <translate x="" y="" z=""/> 
@@ -64,7 +64,7 @@
   <camera>
     <perspective near="0.1" far="1000" xfov="60" yfov="60" width="800" height="600"/>
     <lookat x="0" y="0" z="10" upX="0" upY="1" upZ="0"/>
-    <translate x="0" y="19" z="-25"/>
+    <translate x="0" y="10" z="-25"/>
  </camera>
   
   <areaLight width="5" height="5">
@@ -110,10 +110,10 @@
 
 
 
- <!-- <sphere radius="4">
+ <sphere radius="4">
     <translate x="0" y="4" z="5"/>
     <color r="0.66" g="0.0" b="0"/>
-  </sphere> -->
+  </sphere>
 
 
 
