@@ -49,10 +49,10 @@ void App::InitApp()
 	_deviceContext->PSSetSamplers(0, 1, &_sampler);
 
     float verts[20] = 
-        { -0.9f,  0.9f, 0.f, 0.f, 0.f,   //tl
-           0.9f,  0.9f, 0.f, 1.f, 0.f,   //tr
-           0.9f, -0.9f, 0.f, 1.f, 1.f,   //br
-          -0.9f, -0.9f, 0.f, 0.f, 1.f }; //bl
+        { -0.99f,  0.99f, 0.f, 0.f, 0.f,   //tl
+           0.99f,  0.99f, 0.f, 1.f, 0.f,   //tr
+           0.99f, -0.99f, 0.f, 1.f, 1.f,   //br
+          -0.99f, -0.99f, 0.f, 0.f, 1.f }; //bl
     unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
 
     D3D11_BUFFER_DESC vbd;
@@ -115,8 +115,8 @@ void App::Run()
     Image* imageBuffer = new Image(320, 240);
     
     bool showVPLs = true;
-    int samples = 50;
-    int reflect = 1;
+    int samples = 500;
+    int reflect = 20;
 
     _raytracer->raytrace(scene, imageBuffer, samples, reflect, showVPLs);
 

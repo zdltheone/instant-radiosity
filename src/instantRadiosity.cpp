@@ -129,9 +129,9 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			//}
 
 			// Calculate the hit point;
-			lightStartPoint.x += lightDirection.x * t;
-			lightStartPoint.y += lightDirection.y * t;
-			lightStartPoint.z += lightDirection.z * t;
+			lightStartPoint.x += lightDirection.x * (t + 0.001);
+			lightStartPoint.y += lightDirection.y * (t + 0.001);
+			lightStartPoint.z += lightDirection.z * (t + 0.001);
 		}
 	}
 
@@ -154,12 +154,14 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 	static unsigned int num = 0;
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
+		PointLight& vpl = m_VPLVec[i];
 		if( ( intersectionNormal.y + 1.0f ) < 0.001f )
 		{
 			num++;
 		}
 		float t;
-		XMFLOAT3 pointToVPL = XMFloat3Sub( m_VPLVec[ i ].getPosition(), intersectionPoint );
+		XMFLOAT3 pointToVPL = XMFloat3Sub( vpl.getPosition(), intersectionPoint );
+
 		// Get the normal of hitpoint
 		XMFLOAT3 hitPointSurfaceNormal = intersectionNormal;
 
