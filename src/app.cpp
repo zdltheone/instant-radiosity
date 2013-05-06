@@ -114,9 +114,9 @@ void App::Run()
     Scene* scene = XMLLoader::parseSceneXML("src/Cornell Box.xml");
     Image* imageBuffer = new Image(320, 240);
     
-    bool showVPLs = false;
+    bool showVPLs = true;
     int samples = 50;
-    int reflect = 3;
+    int reflect = 1;
 
     _raytracer->raytrace(scene, imageBuffer, samples, reflect, showVPLs);
 

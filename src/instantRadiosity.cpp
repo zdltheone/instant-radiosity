@@ -66,7 +66,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
 		//XMFLOAT4 rad( 1.0f / probability, 1.0f / probability, 1.0f / probability, 1.0f / probability );
 
-        XMFLOAT3 lightStartPoint( pos_x, areaLight->getPosition().y, pos_z );
+        XMFLOAT3 lightStartPoint(  areaLight->getPosition().x + pos_x, areaLight->getPosition().y,  areaLight->getPosition().z + pos_z );
 		XMFLOAT3 surfaceNormal( 0.0f, -1.0f, 0.0f );
 
 		for( int reflectionIter = 0; reflectionIter < m_reflectionNum; reflectionIter++ )
