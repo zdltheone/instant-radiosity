@@ -37,7 +37,7 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int ref
     }
     _instantRadiosity->SetReflectionNum( reflect );
     _instantRadiosity->SetSampleNum( samples );
-	_instantRadiosity->EmitVPLs( 0.4f, scene );
+	_instantRadiosity->EmitVPLs( 0.5f, scene );
 
     std::cout << "begin\n";
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
@@ -66,6 +66,7 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int ref
         }
     }
       std::cout << "done\n" << endl;
+	  cout << "countNum is " << countNum << endl;
 }
 
 XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
@@ -90,6 +91,11 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     if(_showVPLs == false) {
 	    XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
         XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1, 1, 1)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
+
+		if( color.x > 1.0f || color.y > 1.0f || color.z > 1.0f )
+		{
+			countNum++;
+		}
     } else {
 		XMFLOAT3 fakeLight(-0.25, 0.25, -1);
 		XMStoreFloat3(&color, XMVector3Dot(XMVector3Normalize(XMLoadFloat3(&fakeLight)), XMLoadFloat3(&normal)) * XMLoadFloat3(&color) + XMLoadFloat3(&XMFLOAT3(0.5, 0.5, 0.5)) * XMLoadFloat3(&color));

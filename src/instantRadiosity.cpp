@@ -83,7 +83,6 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			double phi = asin( sqrt( m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 2 ), i ) ) );
 			double theta = 2 * acos( -1 ) * m_rngGenerator.PhiBDirected( m_rngGenerator.GetithPrimeNumber( 2 * reflectionIter + 3 ), i );
 			
-			//cout << phi * 180.0f / 3.1415926 << " " << theta * 180.0f / 3.1415926 << endl;
 
 			XMFLOAT3 pointAtSampleSphere( sin( phi ) * cos( theta ), sin( phi ) * sin( theta ), cos( phi ) );
 			// Translate this point to sphere's location
@@ -118,21 +117,6 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 			rad.z *= lightAttenuationFactor;
 			rad.w *= lightAttenuationFactor;
 
-			//cout << "Current t is " << t << endl;
-			//XMFLOAT3 testHit = lightStartPoint + lightDirection * t;
-			//if( primitive->getType() == 0 )
-			//{
-			//	cout << "VPL " << count << " hits a Sauare! And the coordinates is " << testHit.x << " " << testHit.y << " " << testHit.z << endl;
-			//}
-			//else if( primitive->getType() == 1 )
-			//{
-			//	cout << "VPL " << count << " hits a Sphere!" << testHit.x << " " << testHit.y << " " << testHit.z << endl;
-			//}
-			//else
-			//{
-			//	cout << "VPL " << count << " hits a Cube!" << testHit.x << " " << testHit.y << " " << testHit.z << endl;
-			//}
-
 			// Calculate the hit point;
 			lightStartPoint.x += lightDirection.x * (t + 0.001);
 			lightStartPoint.y += lightDirection.y * (t + 0.001);
@@ -156,14 +140,10 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const  Scene* scene )
 {
 	XMFLOAT4 accumulateContribution( 0.0f, 0.0f, 0.0f, 0.0f );
-	static unsigned int num = 0;
+
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
 		PointLight& vpl = m_VPLVec[i];
-		if( ( intersectionNormal.y + 1.0f ) < 0.001f )
-		{
-			num++;
-		}
 		float t;
 		XMFLOAT3 pointToVPL = XMFloat3Sub( vpl.getPosition(), intersectionPoint );
 
@@ -205,7 +185,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		if( ( fabs( dis1 - dis2 ) < 0.01f )  || ( fabs( dis2 - dis1 ) > 0.01f ) )
 		{
 			XMFLOAT4 plColor = m_VPLVec[ i ].power;
-			float factor = ( 1.0f / m_VPLVec.size() ) * diffuse * ( 1.0f / pow( dis1, 2 ) );
+			float factor = ( 1.0f / m_VPLVec.size() ) * diffuse /** ( 1.0f / pow( dis1, 2 ) )*/;
 			plColor.x *= factor;
 			plColor.y *= factor;
 			plColor.z *= factor;
@@ -214,7 +194,6 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 			accumulateContribution.y += plColor.y;
 			accumulateContribution.z += plColor.z;
 			accumulateContribution.w += plColor.w;
-			num++;
 		}
  	}
 
