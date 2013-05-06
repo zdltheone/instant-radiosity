@@ -95,10 +95,12 @@ bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
 	XMFLOAT3 t_dir = ray.direction;
 
 	//transform ray into local coordinates
-    XMMATRIX world = XMLoadFloat4x4(&this->getTransformation());
-    XMMATRIX inverse = XMMatrixInverse(&XMMatrixDeterminant(world), world);
-    XMStoreFloat3(&t_pos, XMVector3Transform(XMLoadFloat3(&t_pos), inverse));
-    XMStoreFloat3(&t_dir, XMVector3Normalize(XMVector3TransformNormal(XMLoadFloat3(&t_dir), inverse)));
+    XMMATRIX world = XMLoadFloat4x4( &this->getTransformation() );
+    XMMATRIX inverse = XMMatrixInverse( &XMMatrixDeterminant(world), world );
+    XMMATRIX transpose = XMMatrixTranspose(world);
+    XMMATRIX inverseTranspose = XMMatrixInverse( &XMMatrixDeterminant(transpose), transpose );
+	XMStoreFloat3( &t_pos, XMVector3Transform( XMLoadFloat3(&t_pos), inverse ) );
+	XMStoreFloat3( &t_dir, XMVector3Normalize(XMVector3TransformNormal( XMLoadFloat3(&t_dir), inverse ) ));
 
 	double edgeLen = m_edgeLen;
 
@@ -178,8 +180,8 @@ bool Cube::intersect(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
 		}
 	}
 
-    //transform normal to world coordinates
-    XMVECTOR vec = XMVector3TransformNormal( XMLoadFloat3(&normalOut), world);
+    //transform normal from local(xz) to world coordinates
+    XMVECTOR vec = XMVector3Transform( XMLoadFloat3(&normalOut), inverseTranspose);
     XMStoreFloat3(&normalOut, XMVector3Normalize(vec));
 
 	return true;

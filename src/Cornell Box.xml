@@ -8,7 +8,7 @@
   <areaLight width="5" height="5">
     <color r="1" g="1" b="1"/>
     <target x="0" y="0" z="0"/>
-    <translate x="0" y="19.99999" z="0"/>
+    <translate x="0" y="19.99999" z="-5"/>
   </areaLight>
 
  
@@ -42,9 +42,10 @@
     <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
   </square>
 
-  <sphere radius="4">
-    <translate x="0" y="4" z="5"/>
+  <cube edgelen="12">
+    <translate x="0" y="5" z="0"/>
     <color r="0.66" g="0.0" b="0"/>
-  </sphere>
+    <rotate axisX="0" axisY="1" axisZ="0" degrees="-45"/>
+  </cube>
   
 </scene>

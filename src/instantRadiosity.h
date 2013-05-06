@@ -19,6 +19,9 @@ public:
 	InstantRadiosity( const InstantRadiosity& other );
 	~InstantRadiosity();
 
+    void showVPLs();
+    void hideVPLs();
+
 	void SetReflectionNum( unsigned int number );
 	unsigned int GetReflectionNum();
 	void SetSampleNum( unsigned int number );
@@ -27,6 +30,7 @@ public:
 	XMFLOAT3 GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const Scene* scene );
 
 private:
+    bool _showVPLs;
 	RandomNumberGenerator m_rngGenerator;
 	unsigned int m_reflectionNum;
 	unsigned int m_sampleNum;

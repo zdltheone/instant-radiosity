@@ -34,13 +34,26 @@ const Camera* Scene::getCamera() const {
     return _camera;
 }
 
+void Scene::addVPL(const Primitive* vpl) {
+    assert(vpl);
+    _vpls.push_back(vpl);
+}
+
+void Scene::clearVPLs() {
+    _vpls.clear();
+}
+
 const Primitive* Scene::intersectScene(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const {
     const Primitive* intersectedPrimitive = NULL;
     float minDepth = INF;
 
+    std::vector<const Primitive*> prims;
+    prims.insert(prims.end(), _primitives.begin(), _primitives.end());
+    prims.insert(prims.end(), _vpls.begin(), _vpls.end());
+
     //find primitives the ray intersects
-    for(int i(0); i < _primitives.size(); ++i) {
-        const Primitive* primitive = _primitives[i];
+    for(int i(0); i < prims.size(); ++i) {
+        const Primitive* primitive = prims[i];
 
         //if we have an interection, do a depth test
         if(primitive->intersect(ray, normalOut, tOut)) {

@@ -6,6 +6,7 @@ const double eps = 0.005f;
 InstantRadiosity::InstantRadiosity()
 {
 	m_rngGenerator.GeneratePrimeList( 10000 );
+    _showVPLs = false;
 }
 
 InstantRadiosity::InstantRadiosity( const InstantRadiosity& otherInstant )
@@ -35,6 +36,14 @@ void InstantRadiosity::SetSampleNum( unsigned int number )
 unsigned int InstantRadiosity::GetSampleNum()
 {
 	return m_sampleNum;
+}
+
+void InstantRadiosity::showVPLs() {
+    _showVPLs = true;
+}
+
+void InstantRadiosity::hideVPLs() {
+    _showVPLs = false;
 }
 
 void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
@@ -126,15 +135,17 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		}
 	}
 
-	//for( int i = 0; i < m_VPLVec.size(); i++ )
-	//{
-	//	//Sphere* sphere = new Sphere();
-	//	//cout << m_VPLVec[ i ].getPosition().x << " " << m_VPLVec[ i ].getPosition().y << " " << m_VPLVec[ i ].getPosition().z << endl;
-	//	//sphere->setPosition( m_VPLVec[ i ].getPosition() );
-	//	//sphere->SetRadius( 1.0f );
-	//	//sphere->color = XMFLOAT3( 1.0f, 0.0f, 0.0f );
-	//	//scene->addPrimitive( sphere );
-	//}
+    if(_showVPLs) {
+	    for( int i = 0; i < m_VPLVec.size(); i++ )
+	    {
+	        Sphere* sphere = new Sphere();
+	        cout << m_VPLVec[ i ].getPosition().x << " " << m_VPLVec[ i ].getPosition().y << " " << m_VPLVec[ i ].getPosition().z << endl;
+	        sphere->setPosition( m_VPLVec[ i ].getPosition() );
+	        sphere->SetRadius( 0.2f );
+	        sphere->color = XMFLOAT3( 0.85f, 0.85f, 0.f );
+            scene->addVPL(sphere);
+	    }
+    }
 }
 
 XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const  Scene* scene )

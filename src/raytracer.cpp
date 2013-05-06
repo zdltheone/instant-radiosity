@@ -6,11 +6,13 @@ RayTracer::RayTracer(unsigned int maxDepth) {
     _scene = NULL;
     _maxDepth = maxDepth;
     _instantRadiosity = new InstantRadiosity();
+    _showVPLs = false;
 }
 
-void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
+void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int reflect, bool showVPLs) {
     assert(scene);
     assert(imageBuffer);
+    _showVPLs = showVPLs;
     _scene = scene;
     
     const Camera* camera = scene->getCamera();
@@ -28,12 +30,16 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer) {
     float dx = (right - left) / imageBuffer->getWidth();
     float dy = (top - bottom) / imageBuffer->getHeight();
   
-
-    _instantRadiosity->SetReflectionNum( 2 );
-    _instantRadiosity->SetSampleNum( 1 );
+    if(_showVPLs) {
+        _instantRadiosity->showVPLs();
+    } else {
+        _instantRadiosity->hideVPLs();
+    }
+    _instantRadiosity->SetReflectionNum( reflect );
+    _instantRadiosity->SetSampleNum( samples );
 	_instantRadiosity->EmitVPLs( 0.5f, scene );
 
-
+    std::cout << "begin\n";
     for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
          if(row == imageBuffer->getHeight() / 4) {
                 std::cout << "25%\n";
@@ -81,11 +87,19 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
         return XMFLOAT3(); //fix this 
     }
 
-
-	XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
-
-    XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1, 1, 1)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
+    if(_showVPLs == false) {
+	    XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
+        XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1, 1, 1)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
+    }
 
     return color;
   
  }
+
+void RayTracer::showVPLs() {
+    _showVPLs = true;
+}
+
+void RayTracer::hideVPLs() {
+    _showVPLs = false;
+}

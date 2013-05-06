@@ -9,14 +9,16 @@ class RayTracer {
 public:
     RayTracer(unsigned int maxDepth);
 
-    void raytrace( Scene* scene, Image* imageBuffer);
-
+    void raytrace( Scene* scene, Image* imageBuffer, int samples, int reflect, bool showVPLS = false);
+    void showVPLs();
+    void hideVPLs();
 private:
     XMFLOAT3 traceRay(const Ray& ray, unsigned int depth);
 private:
     const Scene* _scene;
     unsigned int _maxDepth;
     InstantRadiosity* _instantRadiosity;
+    bool _showVPLs;
 };
 
 #endif

@@ -14,6 +14,8 @@ public:
 
     void addPrimitive(const Primitive* primitive);
     void addLight(const Light* light);
+    void addVPL(const Primitive* vpl);
+    void clearVPLs();
 
     const std::vector<const Light*>& getLights() const;
     const std::vector<const Light*>& getLights(Light::LightType type) const;
@@ -24,6 +26,7 @@ public:
     const Primitive* intersectScene(const Ray& ray, XMFLOAT3& normalOut, float& tOut) const;
 private:
     std::vector<const Primitive*> _primitives;
+    std::vector<const Primitive*> _vpls;
     std::vector<const Light*> _lights;
     std::map<Light::LightType, std::vector<const Light*> > _lightsMap;
     const Camera* _camera;
