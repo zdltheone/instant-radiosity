@@ -171,7 +171,9 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
         XMFLOAT3 normal;
 		const Primitive *primitive = NULL;
 
-		if( ( primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
+		primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t );
+		//if( ( primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
+		if( primitive != NULL && t < 0 && fabs( t ) > 0.0001 )
 		{
 			continue;
 		}
