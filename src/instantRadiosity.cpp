@@ -1,7 +1,9 @@
 #include "instantRadiosity.h"
 #include "math.h"
+#include <omp.h>
 
 const double eps = 0.005f;
+const double exposure = 200.0f;
 
 InstantRadiosity::InstantRadiosity()
 {
@@ -52,7 +54,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
 	double probability = 1.0f / ( areaLight->width * areaLight->height );
 
-	double    lightAttenuationFactor = 0.2 / acos( -1 );
+	double    lightAttenuationFactor = 0.3 / acos( -1 );
 	for( int i = 1; i <= m_sampleNum; i++ )
 	{
 		// Sample light position at the start point
@@ -187,7 +189,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		if( ( fabs( dis1 - dis2 ) < 0.01f )  || ( fabs( dis2 - dis1 ) > 0.01f ) )
 		{
 			XMFLOAT4 plColor = m_VPLVec[ i ].power;
-			float factor = ( 1.0f / m_VPLVec.size() ) * diffuse /** ( 1.0f / pow( dis1, 2 ) )*/;
+			float factor = ( 1.0f / m_sampleNum ) * diffuse /** ( 1.0f / pow( dis1, 2 ) )*/;
 			plColor.x *= factor;
 			plColor.y *= factor;
 			plColor.z *= factor;
@@ -199,10 +201,89 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		}
  	}
 
-	//cout << "The total vpls is " << m_VPLVec.size() << " , and number of vpls that make contribution to this point is " << num << endl;
-	//if( num != 0 )
+	// Control the exposure
+	//if( accumulateContribution.x > exposure )
 	//{
-	//	cout << "Points on floor are " << num  << endl;
+	//	accumulateContribution.x = exposure;
 	//}
+	//if( accumulateContribution.y > exposure )
+	//{
+	//	accumulateContribution.y = exposure;
+	//}
+	//if( accumulateContribution.z > exposure )
+	//{
+	//	accumulateContribution.z = exposure;
+	//}
+
 	return XMFLOAT3( accumulateContribution.x, accumulateContribution.y, accumulateContribution.z );
 }
+
+//XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const XMFLOAT3 intersectionNormal, const  Scene* scene )
+//{
+//	XMFLOAT4 accumulateContribution( 0.0f, 0.0f, 0.0f, 0.0f );
+//
+//	//omp_set_num_threads( 64 );
+//#pragma omp parallel for shared( accumulateContribution,  intersectionPoint, intersectionNormal, scene ) schedule( dynamic, 64 ) num_threads( 16 )
+//	for( int i = 0; i < m_VPLVec.size(); i++ )
+//	{
+//		PointLight& vpl = m_VPLVec[i];
+//		float t;
+//		XMFLOAT3 pointToVPL = XMFloat3Sub( vpl.getPosition(), intersectionPoint );
+//
+//		// Get the normal of hitpoint
+//		XMFLOAT3 hitPointSurfaceNormal = intersectionNormal;
+//
+//		// Evaluate BRDF
+//		XMVECTOR pointToVPLVec = XMLoadFloat3( &pointToVPL );
+//		XMVECTOR hitPointSurfaceNormalVec = XMLoadFloat3( &hitPointSurfaceNormal );
+//		pointToVPLVec = XMVector3Normalize( pointToVPLVec );
+//		XMStoreFloat3( &pointToVPL, pointToVPLVec );
+//		hitPointSurfaceNormalVec = XMVector3Normalize( hitPointSurfaceNormalVec );
+//
+//		XMVECTOR dotResult = XMVector3Dot( pointToVPLVec, hitPointSurfaceNormalVec );
+//		XMFLOAT3 dotResultFloat3;
+//		XMStoreFloat3( &dotResultFloat3, dotResult );
+//		float diffuse = dotResultFloat3.x;
+//
+//		if( diffuse < 0 )
+//		{
+//			continue;
+//		}
+//
+//		// Shoot shadow ray
+//		XMFLOAT3 normal;
+//		const Primitive *primitive = NULL;
+//
+//		primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t );
+//		//if( ( primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
+//		if( primitive != NULL && t < 0 && fabs( t ) > 0.0001 )
+//		{
+//			continue;
+//		}
+//
+//		XMFLOAT3 testRayHitPoint = intersectionPoint + pointToVPL * t;
+//
+//		float dis1 = math_distance( intersectionPoint, m_VPLVec[ i ].getPosition() );
+//		float dis2 = math_distance( intersectionPoint, testRayHitPoint );
+//
+//		// Accumulate light contribution if the virtual point light's radiance can reach this point
+//		if( ( fabs( dis1 - dis2 ) < 0.01f )  || ( fabs( dis2 - dis1 ) > 0.01f ) )
+//		{
+//#pragma omp critical
+//			{
+//				XMFLOAT4 plColor = m_VPLVec[ i ].power;
+//				float factor = ( 1.0f / m_VPLVec.size() ) * diffuse /** ( 1.0f / pow( dis1, 2 ) )*/;
+//				plColor.x *= factor;
+//				plColor.y *= factor;
+//				plColor.z *= factor;
+//				plColor.w *= factor;
+//				accumulateContribution.x += plColor.x;
+//				accumulateContribution.y += plColor.y;
+//				accumulateContribution.z += plColor.z;
+//				accumulateContribution.w += plColor.w;
+//			}
+//		}
+//	}
+//
+//	return XMFLOAT3( accumulateContribution.x, accumulateContribution.y, accumulateContribution.z );
+//}

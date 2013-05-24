@@ -1,5 +1,6 @@
 #include "app.h"
 #include "instantRadiosity.h"
+#include <omp.h>
 
 using namespace std;
 
@@ -82,7 +83,6 @@ void App::InitApp()
 	hret = _device->CreateBuffer(&ibd, &isrd, &_ib);
 	if(FAILED(hret)) {}
 
-
 }
 
 void App::Update() {
@@ -115,8 +115,8 @@ void App::Run()
     Image* imageBuffer = new Image(480, 320);
     
     bool showVPLs = false;
-    int samples = 50;
-    int reflect = 5;
+    int samples = 20;
+    int reflect = 3;
 
     _raytracer->raytrace(scene, imageBuffer, samples, reflect, showVPLs);
 

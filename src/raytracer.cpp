@@ -1,4 +1,8 @@
 #include "raytracer.h"
+#include <windows.h>
+#include <omp.h>
+
+using namespace std;
 
 static int countNum = 0;
 
@@ -37,10 +41,15 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int ref
     }
     _instantRadiosity->SetReflectionNum( reflect );
     _instantRadiosity->SetSampleNum( samples );
-	_instantRadiosity->EmitVPLs( 0.5f, scene );
+	_instantRadiosity->EmitVPLs( 0.7f, scene );
 
+	unsigned long startTime;
+	unsigned long endTime;
+
+	startTime = GetTickCount();
     std::cout << "begin\n";
-    for(unsigned int row(0); row < imageBuffer->getHeight(); ++row) {
+#pragma omp parallel for shared( imageBuffer, left, right, bottom, cameraTarget, camera, cameraOrigin ) schedule( dynamic, 64 ) num_threads( 8 )
+    for(int row = 0; row < imageBuffer->getHeight(); ++row) {
          if(row == imageBuffer->getHeight() / 4) {
                 std::cout << "25%\n";
         }
@@ -50,7 +59,8 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int ref
         if(row == 3*imageBuffer->getHeight() / 4) {
             std::cout << "75%\n";
         }
-        for(unsigned int col(0); col < imageBuffer->getWidth(); ++col) {
+
+        for(int col(0); col < imageBuffer->getWidth(); ++col) {
           
 
             XMFLOAT3 dir(left + col*(dx), 
@@ -65,8 +75,9 @@ void RayTracer::raytrace( Scene* scene, Image* imageBuffer, int samples, int ref
             imageBuffer->setPixel(row, col, XMFLOAT4(color.x, color.y, color.z, 1.f));
         }
     }
-      std::cout << "done\n" << endl;
-	  cout << "countNum is " << countNum << endl;
+	std::cout << "done\n" << endl;
+	endTime = GetTickCount();
+	cout << "Time elapse: " << ( endTime - startTime ) / 1000.0 << " s" << endl;	
 }
 
 XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
@@ -89,6 +100,11 @@ XMFLOAT3 RayTracer::traceRay(const Ray& ray, unsigned int depth) {
     }
 
     if(_showVPLs == false) {
+		//if( primitive->getType() == 2 && ( normal.y - 1.0f ) > 0.001f )
+		//{
+		//	int a;
+		//	a = 10;
+		//}
 	    XMFLOAT3 radiance = _instantRadiosity->GetRadiance( intersectPoint, normal, _scene );
         XMStoreFloat3(&color, XMLoadFloat3(&XMFLOAT3(1, 1, 1)) * XMLoadFloat3(&radiance) * XMLoadFloat3(&color));
 
