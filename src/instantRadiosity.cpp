@@ -54,7 +54,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 	AreaLight* areaLight = (AreaLight*)lightVec[ 0 ];
 	double probability = 1.0f / ( areaLight->width * areaLight->height );
 
-	double    lightAttenuationFactor = 0.3 / acos( -1 );
+	double    lightAttenuationFactor = 0.5f / acos( -1 );
 	for( int i = 1; i <= m_sampleNum; i++ )
 	{
 		// Sample light position at the start point
@@ -65,7 +65,7 @@ void InstantRadiosity::EmitVPLs( double average_reflectivity, Scene* scene )
 		pos_z *= areaLight->height;
 
 		// Suppose the radiance is equal everywhere on the rectangle area light source
-		XMFLOAT4 rad( 1.0f, 1.0f, 1.0f, 1.0f );
+		XMFLOAT4 rad( 0.6f, 0.6f, 0.6f, 1.0f );
 		//XMFLOAT4 rad( 1.0f / probability, 1.0f / probability, 1.0f / probability, 1.0f / probability );
 
         XMFLOAT3 lightStartPoint(  areaLight->getPosition().x + pos_x, areaLight->getPosition().y,  areaLight->getPosition().z + pos_z );
@@ -146,7 +146,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 	for( int i = 0; i < m_VPLVec.size(); i++ )
 	{
 		PointLight& vpl = m_VPLVec[i];
-		float t;
+		float t = 0.0f;
 		XMFLOAT3 pointToVPL = XMFloat3Sub( vpl.getPosition(), intersectionPoint );
 
 		// Get the normal of hitpoint
@@ -164,7 +164,7 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		XMStoreFloat3( &dotResultFloat3, dotResult );
 		float diffuse = dotResultFloat3.x;
 
-		if( diffuse < 0 )
+		if( diffuse <= 0 )
 		{
 			continue;
 		}
@@ -174,11 +174,12 @@ XMFLOAT3 InstantRadiosity::GetRadiance( const XMFLOAT3 intersectionPoint, const 
 		const Primitive *primitive = NULL;
 
 		primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t );
-		//if( ( primitive = scene->intersectScene( Ray( intersectionPoint + intersectionNormal * eps, pointToVPL ), normal, t ) ) == NULL || ( t < 0 && fabs( t ) > 0.0001 ) )
-		if( primitive != NULL && t < 0 && fabs( t ) > 0.0001 )
+		if( primitive != NULL && t < -0.1 )
 		{
 			continue;
 		}
+
+		//if( t < -0.1f ) cout << "t is negative value" << t << endl;
 
 		XMFLOAT3 testRayHitPoint = intersectionPoint + pointToVPL * t;
 

@@ -116,7 +116,7 @@ void App::Run()
     
     bool showVPLs = false;
     int samples = 20;
-    int reflect = 3;
+    int reflect = 5;
 
     _raytracer->raytrace(scene, imageBuffer, samples, reflect, showVPLs);
 

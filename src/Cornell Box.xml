@@ -42,17 +42,18 @@
     <rotate axisX="0" axisY="0" axisZ="1" degrees="90"/>
   </square>
 
+  <!--
   <cube edgelen="12">
     <translate x="-1" y="1" z="2"/>
     <color r="0.0" g="0.5" b="0.1"/>
     <rotate axisX="0" axisY="1" axisZ="0" degrees="-45"/>
   </cube>
+  -->
 
-  <!--
-  <sphere radius="3">
+  <sphere radius="5">
     <color r="0.2" g="0.3" b="0.5"/>
     <scale x="1" y="1" z="1" />
     <translate x="-2" y="4" z="2"/>
-  </sphere> -->
+  </sphere>
 
 </scene>
